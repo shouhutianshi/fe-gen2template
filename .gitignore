@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+*.pyc
+__pycache__/
+.claude/
+!skills/fast-to-template/references/types/*/.claude/
+!skills/fast-to-template/references/types/*/.claude/settings.json
+scaffold-workspace/

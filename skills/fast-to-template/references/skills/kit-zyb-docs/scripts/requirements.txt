@@ -1,0 +1,24 @@
+# 帮帮文档获取工具依赖包
+
+# 核心依赖
+requests>=2.31.0
+cryptography>=41.0.0
+playwright>=1.46.0
+
+# 可选依赖（用于更高级的功能）
+beautifulsoup4>=4.12.0  # HTML解析
+lxml>=4.9.0  # XML/HTML解析器
+pandas>=2.0.0  # 数据处理（批量处理时使用）
+tqdm>=4.66.0  # 进度条显示
+
+# 开发依赖
+pytest>=7.4.0  # 测试框架
+black>=23.0.0  # 代码格式化
+flake8>=6.0.0  # 代码检查
+mypy>=1.5.0  # 类型检查
+
+# 安装命令
+# pip install -r requirements.txt
+
+# 仅安装核心依赖
+# pip install requests keyring

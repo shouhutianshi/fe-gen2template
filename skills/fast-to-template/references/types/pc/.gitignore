@@ -1,0 +1,12 @@
+node_modules
+dist
+.output
+*.local
+.claude/settings.local.json
+.env
+!.env.example
+*.log
+.DS_Store
+coverage
+test-results
+playwright-report

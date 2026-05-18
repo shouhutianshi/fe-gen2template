@@ -1,0 +1,31 @@
+stages:
+  - build
+
+docker-build:
+  stage: build
+  before_script:
+    - before_ci_script
+  script:
+    - docker_build_fe_script
+  after_script:
+    - after_ci_fe_script
+  tags:
+    - global-runner
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "master"'
+    - if: '$CI_PIPELINE_SOURCE == "web" || $CI_PIPELINE_SOURCE == "api"'
+
+deploy-product:
+  stage: build
+  before_script:
+    - before_ci_script
+  script:
+    - docker_build_fe_script
+    - deploy_product_script
+  after_script:
+    - after_ci_fe_script
+  when: on_success
+  tags:
+    - global-runner
+  only:
+    - master
