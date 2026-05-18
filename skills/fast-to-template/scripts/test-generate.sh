@@ -50,8 +50,8 @@ assert_not_git_ignored() {
 }
 
 assert_fails() {
-  if "$@" >/tmp/fe-influencers-test-fail.log 2>&1; then
-    cat /tmp/fe-influencers-test-fail.log >&2
+  if "$@" >/tmp/fe-gen2template-test-fail.log 2>&1; then
+    cat /tmp/fe-gen2template-test-fail.log >&2
     fail "command should have failed: $*"
   fi
 }

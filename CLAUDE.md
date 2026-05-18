@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-本仓库是 fe-influencers Claude Code 插件。通过 `/scaffold` 命令对话式生成完整的前端项目框架。
+本仓库是 fe-gen2template Claude Code 插件。通过 `/scaffold` 命令对话式生成完整的前端项目框架。
 
-远程仓库：`https://git.zuoyebang.cc/toufang/fe-influencers`
+远程仓库：`https://git.zuoyebang.cc/toufang/fe-gen2template`
 
 ## 结构
 
@@ -19,5 +19,5 @@
 ```bash
 claude plugin validate .
 claude plugin marketplace add .
-claude plugin install fe-influencers
+claude plugin install fe-gen2template
 ```

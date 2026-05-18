@@ -1,4 +1,4 @@
-# fe-influencers
+# fe-gen2template
 
 前端项目脚手架 Claude Code 插件。通过对话式交互一键生成完整的 Vue 3 + Vite + TypeScript 项目框架。
 
@@ -12,12 +12,12 @@
 ## 安装
 
 ```bash
-# 1. 克隆仓库（HTTPS 备选：https://git.zuoyebang.cc/toufang/fe-influencers.git）
-git clone git@git.zuoyebang.cc:toufang/fe-influencers.git ~/code/fe-influencers
+# 1. 克隆仓库（HTTPS 备选：https://git.zuoyebang.cc/toufang/fe-gen2template.git）
+git clone git@git.zuoyebang.cc:toufang/fe-gen2template.git ~/code/fe-gen2template
 
 # 2. 注册并安装插件
-claude plugin marketplace add ~/code/fe-influencers
-claude plugin install fe-influencers
+claude plugin marketplace add ~/code/fe-gen2template
+claude plugin install fe-gen2template
 ```
 
 ## 使用
@@ -42,9 +42,9 @@ claude plugin install fe-influencers
 ## 更新
 
 ```bash
-cd ~/code/fe-influencers && git pull
-claude plugin marketplace add ~/code/fe-influencers
-claude plugin install fe-influencers
+cd ~/code/fe-gen2template && git pull
+claude plugin marketplace add ~/code/fe-gen2template
+claude plugin install fe-gen2template
 ```
 
 ## 生成项目包含

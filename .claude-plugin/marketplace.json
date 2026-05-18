@@ -1,13 +1,13 @@
 {
-  "name": "fe-influencers",
+  "name": "fe-gen2template",
   "description": "前端项目脚手架 - 对话式生成完整的 Vue 3 + Vite + TypeScript 项目",
   "owner": {
     "name": "toufang",
-    "url": "https://git.zuoyebang.cc/toufang/fe-influencers"
+    "url": "https://git.zuoyebang.cc/toufang/fe-gen2template"
   },
   "plugins": [
     {
-      "name": "fe-influencers",
+      "name": "fe-gen2template",
       "description": "一键生成完整前端项目框架，包含 AI 辅助开发配置、内部 Skill、规范文档",
       "version": "1.0.0",
       "source": "./",

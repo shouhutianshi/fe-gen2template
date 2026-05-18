@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# fe-influencers generator
+# fe-gen2template generator
 set -euo pipefail
 
 # --- Parse & validate args ---
@@ -218,7 +218,7 @@ PYEOF
   echo ""
   echo "---"
   echo ""
-  echo "本项目由 fe-influencers v${VERSION} 生成。"
+  echo "本项目由 fe-gen2template v${VERSION} 生成。"
 } > "${TARGET}/README.md"
 
 echo "==> Done! ${TARGET}"

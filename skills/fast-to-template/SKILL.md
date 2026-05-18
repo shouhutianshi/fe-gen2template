@@ -3,7 +3,7 @@ name: scaffold
 description: "对话式前端项目脚手架。触发条件：用户执行 /scaffold、创建新项目、初始化前端工程、搭建前端框架、新建 Vue 项目、生成 H5 页面、搭个后台管理、帮我初始化前端、新建一个页面工程。当用户提到任何创建前端项目的意图时都应使用此 skill，即使用户没有明确提到'脚手架'或'scaffold'。通过对话收集信息后一键生成完整 Vue 3 + Vite + TypeScript 项目，包含 AI 辅助开发配置、内部 Skill、规范文档。"
 ---
 
-# fe-influencers — 前端项目脚手架
+# fe-gen2template — 前端项目脚手架
 
 通过对话式交互一键生成完整的前端项目框架。
 
@@ -115,7 +115,7 @@ bun install
 bun run typecheck
 bun run lint
 bun run build
-git init && git add -A && git commit -m "chore: init project by fe-influencers v<版本>"
+git init && git add -A && git commit -m "chore: init project by fe-gen2template v<版本>"
 ```
 
 如果任何步骤失败，报告错误并给出修复建议。

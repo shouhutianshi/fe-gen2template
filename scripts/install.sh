@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-REPO_URL="git@git.zuoyebang.cc:toufang/fe-influencers.git"
-HTTPS_URL="https://git.zuoyebang.cc/toufang/fe-influencers.git"
-INSTALL_DIR="${HOME}/code/fe-influencers"
+REPO_URL="git@git.zuoyebang.cc:toufang/fe-gen2template.git"
+HTTPS_URL="https://git.zuoyebang.cc/toufang/fe-gen2template.git"
+INSTALL_DIR="${HOME}/code/fe-gen2template"
 DEFAULT_BRANCH="master"
 
-echo "=> fe-influencers 插件安装脚本"
+echo "=> fe-gen2template 插件安装脚本"
 echo ""
 
 # 检查依赖
@@ -33,7 +33,7 @@ claude plugin marketplace add "$INSTALL_DIR"
 
 # 安装插件
 echo "=> 正在安装插件..."
-claude plugin install fe-influencers
+claude plugin install fe-gen2template
 
 echo ""
 echo "=> 安装完成！"
