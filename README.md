@@ -2,35 +2,20 @@
 
 前端项目脚手架 Claude Code 插件。通过对话式交互一键生成完整的 Vue 3 + Vite + TypeScript 项目框架。
 
-## 仓库地址
-
-- Web: https://git.zuoyebang.cc/toufang/fe-influencers
-- SSH: `git@git.zuoyebang.cc:toufang/fe-influencers.git`
-- HTTPS: `https://git.zuoyebang.cc/toufang/fe-influencers.git`
-
 ## 前提条件
 
-- 内部 GitLab 访问权限（`git.zuoyebang.cc`）
-- SSH key 已配置
-- 内网 / VPN 连接
+- 内网 / VPN 连接（需访问 `git.zuoyebang.cc`）
+- Git 已安装，SSH key 已配置
 - Claude Code 已安装
 - Bun 已安装
 
 ## 安装
 
-### 方式一：一键脚本
-
 ```bash
-curl -sSL https://git.zuoyebang.cc/toufang/fe-influencers/-/raw/master/scripts/install.sh | bash
-```
-
-### 方式二：手动安装
-
-```bash
-# clone（HTTPS 备选：https://git.zuoyebang.cc/toufang/fe-influencers.git）
+# 1. 克隆仓库（HTTPS 备选：https://git.zuoyebang.cc/toufang/fe-influencers.git）
 git clone git@git.zuoyebang.cc:toufang/fe-influencers.git ~/code/fe-influencers
 
-# 注册并安装
+# 2. 注册并安装插件
 claude plugin marketplace add ~/code/fe-influencers
 claude plugin install fe-influencers
 ```
@@ -49,7 +34,8 @@ claude plugin install fe-influencers
 
 ```bash
 cd ~/code/fe-influencers && git pull
-claude plugin update fe-influencers
+claude plugin marketplace add ~/code/fe-influencers
+claude plugin install fe-influencers
 ```
 
 ## 生成项目包含
