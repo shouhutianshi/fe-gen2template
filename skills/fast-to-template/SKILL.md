@@ -29,7 +29,15 @@ description: "对话式前端项目脚手架。触发条件：用户执行 /scaf
 
 使用 AskUserQuestion，文本输入，默认值为当前目录名。
 
-### Q2: 项目类型
+### Q2: 输出目录
+
+使用 AskUserQuestion，选项：
+- 上一级目录（推荐）
+- 自定义路径
+
+默认：上一级目录（`..`）。项目将创建为 `<输出目录>/<项目名称>`。
+
+### Q3: 项目类型
 
 使用 AskUserQuestion，选项：
 - PC（Element Plus）
@@ -38,7 +46,7 @@ description: "对话式前端项目脚手架。触发条件：用户执行 /scaf
 
 默认：PC
 
-### Q3: 测试范围
+### Q4: 测试范围
 
 使用 AskUserQuestion，选项：
 - 仅单元测试（Vitest）
@@ -47,7 +55,7 @@ description: "对话式前端项目脚手架。触发条件：用户执行 /scaf
 
 默认：仅单元测试
 
-### Q4: 状态管理
+### Q5: 状态管理
 
 使用 AskUserQuestion，选项：
 - 包含 Pinia（推荐）
@@ -55,7 +63,7 @@ description: "对话式前端项目脚手架。触发条件：用户执行 /scaf
 
 默认：包含 Pinia
 
-### Q5: 内部 Skill
+### Q6: 内部 Skill
 
 使用 AskUserQuestion，选项：
 - 包含（推荐）
@@ -68,13 +76,13 @@ description: "对话式前端项目脚手架。触发条件：用户执行 /scaf
 | 参数 | 来源 | 值 |
 |---|---|---|
 | --name | Q1 | 项目名称 |
-| --type | Q2 | pc / h5 / both |
-| --test-scope | Q3 | unit / unit+e2e / full |
-| --pinia | Q4 | true / false |
-| --skills | Q5 | true / false |
+| --output | Q2 | 输出目录，默认 `..`（上一级） |
+| --type | Q3 | pc / h5 / both |
+| --test-scope | Q4 | unit / unit+e2e / full |
+| --pinia | Q5 | true / false |
+| --skills | Q6 | true / false |
 | --username | git config user.name | 默认 "dev" |
 | --version | 读取 plugin.json version | 当前版本 |
-| --output | 固定 "." | 输出目录 |
 
 ## 生成
 

@@ -65,7 +65,7 @@
 **需求 ID:** <PMS Story ID>
 **PRD:** <帮帮文档 URL / fileId>
 **主分支:** <main / master / release/...>
-**集成分支:** <type>/xiaoyang/<feature>
+**集成分支:** <type>/{{USERNAME}}/<feature>
 **Base SHA:** <git rev-parse HEAD>
 **当前阶段:** <阶段名>
 **最后一次通过验证:** <命令 + 时间 + 摘要>
@@ -114,11 +114,11 @@ git log --oneline -10
 
 ## 分支与 Worktree
 
-默认分支命名：`<type>/xiaoyang/<name>`。
+默认分支命名：`<type>/{{USERNAME}}/<name>`。
 
 常用 `type`：`feat`、`bugfix`、`hotfix`、`refactor`、`docs`、`chore`。
 
-创建分支前必须确认最终分支名符合 `<type>/xiaoyang/<name>`。`name` 建议使用需求 ID、Bug ID 或英文 kebab-case 摘要。
+创建分支前必须确认最终分支名符合 `<type>/{{USERNAME}}/<name>`。`name` 建议使用需求 ID、Bug ID 或英文 kebab-case 摘要。
 
 创建 worktree 前检测是否已经在 linked worktree：
 

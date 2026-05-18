@@ -28,7 +28,16 @@ claude plugin install fe-influencers
 /scaffold
 ```
 
-回答 5 个问题后自动生成完整项目。
+回答 6 个问题后自动生成完整项目：
+
+| # | 问题 | 选项 |
+|---|------|------|
+| 1 | 项目名称 | 自由输入，默认为当前目录名 |
+| 2 | 输出目录 | 上一级目录（默认）/ 自定义路径 |
+| 3 | 项目类型 | PC（Element Plus）/ H5（Vant 4）/ 两者 |
+| 4 | 测试范围 | 仅单元测试 / 单元+E2E / 完整测试 |
+| 5 | 状态管理 | 包含 Pinia / 不包含 |
+| 6 | 内部 Skill | 包含 / 不包含 |
 
 ## 更新
 
@@ -48,7 +57,13 @@ claude plugin install fe-influencers
 - ESLint + Prettier
 - Vitest 单元测试 / Playwright E2E（可选）
 - .gitlab-ci.yml + Dockerfile
-- CLAUDE.md + AGENTS.md（AI 辅助开发配置）
-- 内部 Skill（kit-zyb-docs、kit-fe-arc 等 6 个）
-- Slash Commands（commit、debug 等 13 个）
-- 规范文档（docs/conventions/）
+- CLAUDE.md — AI 辅助开发配置，包含：
+  - **规范渐进加载** — 修改代码前按场景自动读取对应规范（组件、样式、测试、API 等）
+  - **路径分流** — 小任务走快速路径（4 步），复杂任务走完整路径
+  - **验证门禁** — lint / typecheck / test / build 通过标准表格化
+  - **高风险变更清单** — 公共 API、权限、构建配置等需人工确认
+- Slash Commands：
+  - `conventions` — 一次性预加载全部开发规范
+  - `verify` — 执行本地验证清单并输出结果表格
+  - `commit`、`debug` 等 13 个常用命令
+- 规范文档（docs/conventions/）— 组件、样式、测试、API 联调、代码审查、Git、验证、并行开发、验收用例生成
