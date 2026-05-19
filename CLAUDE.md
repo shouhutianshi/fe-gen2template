@@ -21,3 +21,5 @@ claude plugin validate .
 claude plugin marketplace add .
 claude plugin install fe-gen2template
 ```
+
+<!-- scaffold-sync version: 1.0.0 -->
