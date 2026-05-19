@@ -113,17 +113,14 @@ if [[ "$HAS_E2E" == "true" ]]; then
 fi
 
 # 4. Skills & commands
-ALWAYS_COMMANDS=("scaffold-sync.md" "update-readme.md")
 mkdir -p "${TARGET}/.claude/commands"
-for ac in "${ALWAYS_COMMANDS[@]}"; do
-  cp "${REFS}/commands/${ac}" "${TARGET}/.claude/commands/"
-done
+cp "${REFS}/commands/update-readme.md" "${TARGET}/.claude/commands/"
 if [[ "$INCLUDE_SKILLS" == "true" ]]; then
   mkdir -p "${TARGET}/.claude/skills"
   cp -r "${REFS}/skills/"* "${TARGET}/.claude/skills/"
   for cmd in "${REFS}/commands/"*.md; do
     basename=$(basename "$cmd")
-    [[ " ${ALWAYS_COMMANDS[*]} " == *" ${basename} "* ]] && continue
+    [[ "$basename" == "update-readme.md" ]] && continue
     cp "$cmd" "${TARGET}/.claude/commands/"
   done
 fi

@@ -1,9 +1,13 @@
+---
+name: scaffold-sync
+description: "同步脚手架最新内容到当前项目。触发条件：用户说/scaffold-sync、同步脚手架、更新规范、同步skill、更新模板。将 fe-gen2template 插件中最新的 Skill、Commands 和 Docs 同步到当前已生成的前端项目。"
+---
+
 同步 fe-gen2template 脚手架的最新 Skill、Commands 和 Docs 到当前项目。
 
 ## 定位插件源目录
 
 ```bash
-# 找到最新版本的插件安装路径
 SYNC_SRC=$(ls -d ~/.claude/plugins/cache/fe-gen2template/fe-gen2template/*/skills/fast-to-template/references 2>/dev/null | sort -V | tail -1)
 ```
 
@@ -34,22 +38,9 @@ SYNC_SRC=$(ls -d ~/.claude/plugins/cache/fe-gen2template/fe-gen2template/*/skill
 ## 同步后验证
 
 ```bash
-# 确认 skills 目录非空
-ls .claude/skills/
-
-# 确认 commands 目录非空
-ls .claude/commands/
-
-# 确认 docs 目录完整
-ls docs/conventions/ docs/workflow.md docs/mcp-setup.md
+ls .claude/skills/ .claude/commands/ docs/conventions/ docs/workflow.md docs/mcp-setup.md
 ```
 
 ## 版本记录
 
-同步完成后，读取插件 `package.json` 的 version，更新 `CLAUDE.md` 最后一行的版本号：
-
-```
-本项目由 fe-gen2template vX.Y.Z 生成。
-```
-
-改为最新的插件版本。
+同步完成后，读取插件 `package.json` 的 version，更新 `CLAUDE.md` 末尾的版本号为最新插件版本。

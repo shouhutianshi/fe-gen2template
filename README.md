@@ -69,8 +69,9 @@ claude plugin install fe-gen2template
 
 | 命令 | 说明 |
 |------|------|
-| `/scaffold-sync` | 从插件同步最新 Skill/规范到当前项目 |
 | `/update-readme` | 同步 README.md 和 CLAUDE.md 与项目真实状态 |
+
+此外，`/scaffold-sync` 是**插件级命令**，无需安装到项目，任意已生成项目都可直接调用，用于同步最新 Skill/规范。
 
 选择"包含内部 Skill"（Q6）时额外包含：
 
