@@ -21,7 +21,7 @@ description: "对话式前端项目脚手架。触发条件：用户执行 /scaf
    claude plugin list 2>/dev/null | grep superpowers
    ```
    - bun 不可用 → 提示安装 bun
-   - superpowers 未安装 → 提示：`claude plugin install superpowers`
+   - superpowers 未安装 → 自动执行：`claude plugin install superpowers`
 
 ## 对话流程
 
