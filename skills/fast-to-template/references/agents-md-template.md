@@ -44,7 +44,7 @@
 ## Git 与协作
 
 - 不回退用户改动，不清理无关未跟踪文件，不重写历史，除非用户明确要求。
-- 分支命名：`<type>/{{USERNAME}}/<name>`，type 为 feat / bugfix / hotfix / refactor / docs / chore。
+- 分支命名：`<type>/<name>`，type 为 feat / bugfix / hotfix / refactor / docs / chore。
 - 提交用 `/commit`，审查用 `cr`（命令 `/cr`）。
 - 禁止直接 push 到 protected 分支；禁止 `--force`，必须强推时用 `--force-with-lease` 且人工确认。
 - 多 agent 并行时必须明确文件所有权，避免多个代理同时修改同一文件集合。

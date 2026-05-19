@@ -2,7 +2,7 @@
 
 ## 分支规范
 
-格式：`<type>/{{USERNAME}}/<name>`
+格式：`<type>/<name>`
 
 | type | 用途 |
 | --- | --- |
@@ -13,7 +13,7 @@
 | `docs` | 文档变更 |
 | `chore` | 工程化、配置、依赖、脚本等 |
 
-示例：`feat/dev-user/homework-module`、`bugfix/dev-user/login-error`
+示例：`feat/homework-module`、`bugfix/login-error`
 
 规则：
 - `name` 使用需求 ID、Bug ID 或英文 kebab-case 摘要，避免空格和特殊字符

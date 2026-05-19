@@ -63,9 +63,11 @@ claude plugin install fe-gen2template
   - **验证门禁** — lint / typecheck / test / build 通过标准表格化
   - **高风险变更清单** — 公共 API、权限、构建配置等需人工确认
 - Slash Commands：
+  - `scaffold-sync` — 从插件同步最新 Skill/规范到已生成的项目
+  - `update-readme` — 同步 README.md 和 CLAUDE.md 与项目真实状态
   - `conventions` — 一次性预加载全部开发规范
   - `verify` — 执行本地验证清单并输出结果表格
-  - `commit`、`debug` 等 13 个常用命令
+  - `commit`、`debug` 等 13 个常用命令（仅 `--skills` 模式）
 - 规范文档（docs/conventions/）— 组件、样式、测试、API 联调、代码审查、Git、验证、并行开发、验收用例生成
 
 ## 目录结构
@@ -192,6 +194,7 @@ claude plugin install fe-gen2template
 
 ## 注意事项
 
-- Command 和 Skill **仅在用户选择"包含内部 Skill"（Q6）时**才会被复制到目标项目，对应 `generate.sh` 中 `INCLUDE_SKILLS=true` 的分支。
-- 修改已有 Command/Skill 后，已生成的项目不会自动更新。用户需手动重新 `/scaffold` 或从插件目录复制。
+- Command 和 Skill **仅在用户选择"包含内部 Skill"（Q6）时**才会被复制到目标项目，对应 `generate.sh` 中 `INCLUDE_SKILLS=true` 的分支。`scaffold-sync` 和 `update-readme` 例外，无条件复制到所有项目。
+- 修改已有 Command/Skill 后，已生成的项目可通过 `/scaffold-sync` 同步最新内容。
+- 分支命名格式为 `<type>/<name>`（如 `feat/login-module`），不包含开发者名称。
 - `plugin.json` 中的 `version` 会在 `generate.sh` 中被读取并写入目标项目的 `CLAUDE.md` 和 `README.md`，发版时记得更新。

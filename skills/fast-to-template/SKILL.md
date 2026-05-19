@@ -81,7 +81,7 @@ description: "对话式前端项目脚手架。触发条件：用户执行 /scaf
 | --test-scope | Q4 | unit / unit+e2e / full |
 | --pinia | Q5 | true / false |
 | --skills | Q6 | true / false |
-| --username | git config user.name | 默认 "dev" |
+| --username | git config user.name | 默认 "dev"（用于 CLAUDE.md/AGENTS.md 作者标识，不影响分支命名） |
 | --version | 读取 plugin.json version | 当前版本 |
 
 ## 生成

@@ -111,7 +111,7 @@ flowchart LR
 **需求 ID:** <PMS Story ID>
 **PRD:** <帮帮文档 URL / fileId>
 **主分支:** <main / master / release/...>
-**集成分支:** <type>/{{USERNAME}}/<feature>
+**集成分支:** <type>/<feature>
 **Base SHA:** <git rev-parse HEAD>
 **当前阶段:** <阶段名>
 **最后一次通过验证:** <命令 + 时间 + 摘要>
@@ -219,7 +219,7 @@ git check-ignore -q .worktrees || git check-ignore -q worktrees
 
 ### 5.2 命名约定
 
-默认分支命名：`<type>/{{USERNAME}}/<name>`。
+默认分支命名：`<type>/<name>`。
 
 常用 `type`：
 - `feat`：新功能或需求开发。
@@ -229,29 +229,28 @@ git check-ignore -q .worktrees || git check-ignore -q worktrees
 - `docs`：文档变更。
 - `chore`：工程化、配置、依赖、脚本等杂项。
 
-如团队已有更细分类，可沿用同一形态：`<type>/{{USERNAME}}/<需求名或问题摘要>`。
+如团队已有更细分类，可沿用同一形态：`<type>/<需求名或问题摘要>`。
 
 建议：
-- 集成分支：`feat/{{USERNAME}}/<需求名>`、`bugfix/{{USERNAME}}/<缺陷名>` 或 `hotfix/{{USERNAME}}/<线上问题>`。
-- 模块分支：`feat/{{USERNAME}}/<需求名>-<模块名>` 或 `bugfix/{{USERNAME}}/<缺陷名>-<模块名>`。
+- 集成分支：`feat/<需求名>`、`bugfix/<缺陷名>` 或 `hotfix/<线上问题>`。
+- 模块分支：`feat/<需求名>-<模块名>` 或 `bugfix/<缺陷名>-<模块名>`。
 - Worktree 路径：`.worktrees/<需求名>-<模块名>`。
 
 ### 5.3 分支创建门禁
 
-创建分支前必须先确定 `type` 和 `name`，并校验最终分支名符合 `<type>/{{USERNAME}}/<name>`。`name` 建议使用需求 ID、Bug ID 或英文 kebab-case 摘要，避免空格和特殊字符。
+创建分支前必须先确定 `type` 和 `name`，并校验最终分支名符合 `<type>/<name>`。`name` 建议使用需求 ID、Bug ID 或英文 kebab-case 摘要，避免空格和特殊字符。
 
-允许的默认 `type`：`feat`、`bugfix`、`hotfix`、`refactor`、`docs`、`chore`。如团队使用其他类型，必须仍保持 `<type>/{{USERNAME}}/<name>` 形态。
+允许的默认 `type`：`feat`、`bugfix`、`hotfix`、`refactor`、`docs`、`chore`。如团队使用其他类型，必须仍保持 `<type>/<name>` 形态。
 
 普通分支创建：
 
 ```bash
 TYPE=feat
 NAME=<story-id-or-kebab-summary>
-BRANCH="${TYPE}/{{USERNAME}}/${NAME}"
+BRANCH="${TYPE}/${NAME}"
 
 case "$BRANCH" in
-  feat/{{USERNAME}}/*|bugfix/{{USERNAME}}/*|hotfix/{{USERNAME}}/*|refactor/{{USERNAME}}/*|docs/{{USERNAME}}/*|chore/{{USERNAME}}/*) ;;
-  */{{USERNAME}}/*) ;; # 团队扩展 type，但必须保留 /{{USERNAME}}/
+  feat/*|bugfix/*|hotfix/*|refactor/*|docs/*|chore/*) ;;
   *) echo "Invalid branch name: $BRANCH"; exit 1 ;;
 esac
 
@@ -263,12 +262,11 @@ Worktree 分支创建：
 ```bash
 TYPE=feat
 NAME=<story-id-or-kebab-summary>
-BRANCH="${TYPE}/{{USERNAME}}/${NAME}"
+BRANCH="${TYPE}/${NAME}"
 WORKTREE_PATH=".worktrees/${NAME}"
 
 case "$BRANCH" in
-  feat/{{USERNAME}}/*|bugfix/{{USERNAME}}/*|hotfix/{{USERNAME}}/*|refactor/{{USERNAME}}/*|docs/{{USERNAME}}/*|chore/{{USERNAME}}/*) ;;
-  */{{USERNAME}}/*) ;;
+  feat/*|bugfix/*|hotfix/*|refactor/*|docs/*|chore/*) ;;
   *) echo "Invalid branch name: $BRANCH"; exit 1 ;;
 esac
 
@@ -281,7 +279,7 @@ git worktree add "$WORKTREE_PATH" -b "$BRANCH"
 git branch --show-current
 ```
 
-如果当前分支不符合 `<type>/{{USERNAME}}/<name>`，不能进入开发、push 或创建 MR。
+如果当前分支不符合 `<type>/<name>`，不能进入开发、push 或创建 MR。
 
 每个 worktree 记录：
 - `base branch`
@@ -494,7 +492,7 @@ CI 成功标准：
 以下为**阻断项**（任一未通过则不能提交/发布），agent 可自动检查：
 
 - [ ] **计划就绪**：PRD 已导出、架构概览存在、实施计划已写入（快速路径可省略拆模块）
-- [ ] **分支合规**：分支名符合 `<type>/{{USERNAME}}/<name>`，未直接 push 到 protected 分支
+- [ ] **分支合规**：分支名符合 `<type>/<name>`，未直接 push 到 protected 分支
 - [ ] **本地验证全通过**：lint 0 error、typecheck 0 error、test 0 failed、build 成功
 - [ ] **审查通过**：`cr` 审查完成，Critical / Important 问题已关闭
 - [ ] **提交范围干净**：`git diff --cached` 无无关变更
