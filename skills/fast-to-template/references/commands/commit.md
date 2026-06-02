@@ -22,6 +22,7 @@ description: 创建 git 提交并自动推送
 - 类型：`feat`、`fix`、`refactor`、`perf`、`style`、`docs`、`chore`
 - 描述：简洁中文，不超过 50 字
 - 风格与上面的最近提交保持一致
+- **禁止**在提交信息中添加任何 Co-Authored-By 行（如 `Co-Authored-By: Claude`、`Co-Authored-By: Happy` 等）
 
 ### 2. 暂存并提交
 

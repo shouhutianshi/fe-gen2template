@@ -7,16 +7,16 @@
 ```
 src/
 ├── components/          # 通用组件（跨页面复用）
-│   ├── BaseButton.vue
-│   ├── BaseModal.vue
-│   └── DataEmpty.vue
+│   ├── base-button.vue
+│   ├── base-modal.vue
+│   └── data-empty.vue
 ├── composables/         # 可复用逻辑（useXxx）
 │   ├── useLoading.ts
 │   └── usePagination.ts
 └── views/
     └── Home/
         └── components/  # 页面私有组件（仅当前页面使用）
-            └── HomeHeader.vue
+            └── home-header.vue
 ```
 
 - 通用组件放 `src/components/`，页面私有组件放 `views/<Page>/components/`
@@ -24,7 +24,7 @@ src/
 
 ### 命名规范
 
-- 组件文件：`PascalCase`，如 `UserAvatar.vue`、`BaseButton.vue`
+- 组件文件名：`kebab-case`，如 `user-avatar.vue`、`base-button.vue`；import 时用 `PascalCase`，如 `import UserAvatar from './user-avatar.vue'`
 - 通用组件以功能前缀区分：`Base`（基础）、`App`（全局布局）、`Data`（数据展示）
 - composable 文件：`camelCase`，以 `use` 开头，如 `useLoading.ts`
 - 组件 name：`<script setup>` 中不需要手动声明，依赖文件名自动推断

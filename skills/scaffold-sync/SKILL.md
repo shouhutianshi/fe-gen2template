@@ -21,7 +21,9 @@ SYNC_SRC=$(ls -d ~/.claude/plugins/cache/fe-gen2template/fe-gen2template/*/skill
 | --- | --- |
 | `$SYNC_SRC/skills/*` | `.claude/skills/` |
 | `$SYNC_SRC/commands/*.md` | `.claude/commands/` |
-| `$SYNC_SRC/docs/*` | `docs/` |
+| `$SYNC_SRC/docs/mcp-setup.md` | `docs/mcp-setup.md` |
+| `$SYNC_SRC/skills/tf-tech-spec/references/workflow.md` | `docs/workflow.md` |
+| `$SYNC_SRC/skills/tf-tech-spec/references/conventions/*` | `docs/conventions/` |
 
 ## 同步策略
 

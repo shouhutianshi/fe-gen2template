@@ -125,8 +125,11 @@ if [[ "$INCLUDE_SKILLS" == "true" ]]; then
   done
 fi
 
-# 5. Docs
-cp -r "${REFS}/docs" "${TARGET}/docs"
+# 5. Docs (mcp-setup + workflow + conventions from skill)
+mkdir -p "${TARGET}/docs/conventions"
+cp "${REFS}/docs/mcp-setup.md" "${TARGET}/docs/"
+cp "${REFS}/skills/tf-tech-spec/references/workflow.md" "${TARGET}/docs/"
+cp -r "${REFS}/skills/tf-tech-spec/references/conventions/"* "${TARGET}/docs/conventions/"
 
 # 6. Substitute variables
 python3 - "$TARGET" "$NAME" "$USERNAME" "$VERSION" <<'PYEOF'
