@@ -184,6 +184,56 @@ export function useLoading(initial = false) {
 }
 ```
 
+### 数据刷新与 loading 状态分离
+
+列表/详情页的 `fetchXxx` 函数必须区分**首次加载**和**操作后刷新**两种场景，避免操作后刷新触发全页/全表 loading 导致内容闪烁或消失。
+
+**规则：`silent` 参数**
+
+- `fetchList` / `fetchProfile` 等数据获取函数支持 `{ silent?: boolean }` 选项
+- `silent = false`（默认）：正常设置 `loading = true`，显示骨架屏/loading 遮罩
+- `silent = true`：跳过 loading 状态变更，仅静默更新数据
+
+```typescript
+// ✓ 正确：fetchList 支持 silent 模式
+async function fetchList(options?: { silent?: boolean }) {
+  const silent = options?.silent ?? false
+  if (!silent) loading.value = true
+  try {
+    const res = await api.getList(params)
+    list.value = res.data.list
+  } finally {
+    if (!silent) loading.value = false
+  }
+}
+
+// ✓ 首次加载 / 筛选 / 翻页：正常 loading
+onMounted(() => fetchList())
+function onFilterChange() { fetchList() }
+function changePage(p: number) { fetchList() }
+
+// ✓ 操作后刷新：静默更新，不触发 loading
+async function handleDelete(id: number) {
+  await api.deleteItem(id)
+  await fetchList({ silent: true })
+}
+async function handleUpdate(data: UpdateParams) {
+  await api.updateItem(data)
+  await fetchList({ silent: true })
+}
+```
+
+**何时用 silent，何时不用：**
+
+| 场景 | silent | 原因 |
+|------|--------|------|
+| 首次进入页面 | `false` | 用户在等待数据，需要 loading 反馈 |
+| 筛选/搜索/翻页 | `false` | 用户主动触发，需要 loading 反馈 |
+| 重置筛选 | `false` | 用户主动触发，需要 loading 反馈 |
+| 修改/删除/通过/驳回等操作后 | `true` | 用户已看到操作结果提示，数据静默更新即可 |
+| 批量操作后 | `true` | 同上 |
+| 导入/导出后刷新列表 | `true` | 同上 |
+
 ## 组件拆分原则
 
 ### 何时拆分
