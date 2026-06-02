@@ -1,6 +1,6 @@
 ---
 name: tf-tech-spec
-version: 1.0.1
+version: 1.1.0
 description: >-
   前端技术方案生成器。当用户要求技术方案、技术文档、tech spec、技术设计、实现方案、
   方案文档时使用。当用户提供 PRD、Story、Bug、需求描述并要求拆成前端方案时使用。
