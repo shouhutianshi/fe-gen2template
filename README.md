@@ -39,6 +39,23 @@ claude plugin marketplace add .
 claude plugin install fe-gen2template
 ```
 
+### 卸载插件
+
+```bash
+claude plugin uninstall fe-gen2template
+```
+
+### 常用插件命令
+
+| 命令 | 说明 |
+|------|------|
+| `claude plugin list` | 查看已安装插件 |
+| `claude plugin install <name>` | 安装插件 |
+| `claude plugin uninstall <name>` | 卸载插件 |
+| `claude plugin update <name>` | 更新到最新版 |
+| `claude plugin marketplace add <path>` | 注册 marketplace |
+| `claude plugin marketplace remove <name>` | 移除 marketplace 注册 |
+
 ## 生成项目内容
 
 ### 工程基础
