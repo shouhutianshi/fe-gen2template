@@ -1,5 +1,6 @@
 ---
 name: tf-tech-spec
+version: 1.0.1
 description: >-
   前端技术方案生成器。当用户要求技术方案、技术文档、tech spec、技术设计、实现方案、
   方案文档时使用。当用户提供 PRD、Story、Bug、需求描述并要求拆成前端方案时使用。
@@ -82,3 +83,10 @@ description: >-
 ## 与工作流对齐
 
 复杂 PRD 先补架构和模块地图再进入方案。多 agent 并行需文件所有权不重叠 + 共享契约冻结。验证命令从 `package.json` 或 CI 发现。完成声明必须基于新鲜验证证据。提交前 `/cr` 审查。
+
+## 版本管理
+
+本 skill 使用 semver 版本号（frontmatter `version` 字段）。任何修改都应同步更新版本号：
+- minor：新增章节、参考文档、脚本
+- patch：措辞修正、补全、小幅优化
+- major：删除章节、破坏性变更
