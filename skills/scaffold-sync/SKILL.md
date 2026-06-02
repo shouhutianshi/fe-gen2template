@@ -1,5 +1,6 @@
 ---
 name: scaffold-sync
+version: 1.0.0
 description: >-
   同步脚手架最新内容到当前项目。将 fe-gen2template 插件中最新的 Skill、Commands 和 Docs
   同步到当前已生成的前端项目。触发条件：用户说同步脚手架、更新规范、同步 skill、更新模板、
@@ -65,3 +66,10 @@ SYNC_SRC=$(ls -d ~/.claude/plugins/cache/fe-gen2template/fe-gen2template/*/skill
 
 1. **验证**：抽查关键文件存在且非空（如 `tf-tech-spec/SKILL.md`、`conventions-guide.md`、`self-check.md`、`scripts/*.sh`）；统计源和目标文件数是否一致
 2. **版本标记**：读取插件 `package.json` 的 version，更新 `CLAUDE.md` 末尾 `<!-- scaffold-sync version: X.X.X -->`
+
+## 版本管理
+
+本 skill 使用 semver 版本号（frontmatter `version` 字段）。任何修改都应同步更新版本号：
+- minor：新增同步步骤、验证规则、同步表条目
+- patch：措辞修正、流程优化、小幅调整
+- major：删除同步内容、破坏性变更同步策略
