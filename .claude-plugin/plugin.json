@@ -1,6 +1,6 @@
 {
   "name": "fe-gen2template",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "前端项目脚手架 - 对话式生成完整的 Vue 3 + Vite + TypeScript 项目",
   "author": {
     "name": "xiaoyang12"

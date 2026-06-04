@@ -9,7 +9,7 @@
     {
       "name": "fe-gen2template",
       "description": "一键生成完整前端项目框架，包含 AI 辅助开发配置、内部 Skill、规范文档",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "source": "./",
       "author": {
         "name": "xiaoyang12"

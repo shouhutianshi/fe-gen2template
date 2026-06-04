@@ -1,6 +1,6 @@
 ---
 name: scaffold-sync
-version: 1.0.0
+version: 1.1.0
 description: >-
   同步脚手架最新内容到当前项目。将 fe-gen2template 插件中最新的 Skill、Commands 和 Docs
   同步到当前已生成的前端项目。触发条件：用户说同步脚手架、更新规范、同步 skill、更新模板、
@@ -19,6 +19,64 @@ description: >-
    - 不存在 → 询问用户是否补充同步 skills（初始生成时可能未选 `--skills`），同意后走「初始同步」
    - 存在 → 走「增量同步」
 
+## 缓存刷新检查
+
+在定位缓存路径之前，检查源仓库是否有更新，确保同步最新版本。
+
+### 1. 定位源仓库
+
+优先使用本地仓库，备选从 `marketplace.json` 读取：
+
+```bash
+REPO_DIR=~/code/fe-gen2template
+```
+
+- `$REPO_DIR` 存在且是 git 仓库 → 使用本地仓库
+- 不存在 → 跳过刷新，提示用户可运行插件仓库的 `scripts/install.sh` 获取最新版
+
+### 2. 检测是否有更新
+
+```bash
+cd "$REPO_DIR"
+git fetch origin master 2>/dev/null
+LOCAL=$(git rev-parse HEAD)
+REMOTE=$(git rev-parse origin/master)
+```
+
+- `LOCAL` = `REMOTE` → 缓存已是最新，跳过刷新
+- `LOCAL` ≠ `REMOTE` → 有新提交，询问用户是否刷新缓存
+
+### 3. 执行刷新（用户确认后）
+
+按顺序执行，任一步骤失败则中止并提示手动处理：
+
+```bash
+cd "$REPO_DIR" && git pull --ff-only origin master
+claude plugin marketplace add "$REPO_DIR"
+claude plugin install fe-gen2template
+```
+
+刷新成功后报告版本变化：
+
+```bash
+OLD_VERSION=$(ls -d ~/.claude/plugins/cache/fe-gen2template/fe-gen2template/*/ 2>/dev/null | sort -V | head -1 | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+# ... install 后 ...
+NEW_VERSION=$(ls -d ~/.claude/plugins/cache/fe-gen2template/fe-gen2template/*/ 2>/dev/null | sort -V | tail -1 | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+```
+
+向用户报告：`插件已从 v${OLD_VERSION} 刷新到 v${NEW_VERSION}`。
+
+### 4. 失败处理
+
+| 场景 | 处理 |
+|---|---|
+| 源仓库不存在 | 跳过刷新，使用当前缓存 |
+| `git fetch` 失败（网络） | 跳过刷新，警告缓存可能过时 |
+| `git pull --ff-only` 失败（分支分歧） | 中止，提示手动解决冲突后重试 |
+| `marketplace add` 或 `plugin install` 失败 | 中止，提示手动运行 `scripts/install.sh` |
+
+> 注意：刷新后缓存目录版本号可能变化（如 1.0.0 → 1.1.0），后续「定位插件源」步骤会在刷新后重新定位，无需特殊处理。
+
 ## 定位插件源
 
 ```bash
@@ -28,6 +86,8 @@ SYNC_SRC=$(ls -d ~/.claude/plugins/cache/fe-gen2template/fe-gen2template/*/skill
 为空则提示安装：`claude plugin install fe-gen2template`。定位后验证 `$SYNC_SRC/skills/tf-tech-spec/SKILL.md` 存在，不存在说明插件安装不完整。
 
 插件版本号从缓存根目录的 `package.json` 读取（`SYNC_SRC` 向上 3 级）。
+
+> 如果上一步执行了缓存刷新，缓存路径中的版本号目录可能已变化，本步骤会在刷新后重新定位。
 
 ## 同步内容
 
