@@ -1,5 +1,6 @@
 ---
 name: kit-zyb-docs
+version: 1.0.0
 description: 该技能用于获取帮帮文档（docs.zuoyebang.cc）内容，支持自动登录、Cookie管理、文档导出和内容提取功能。
 ---
 

@@ -134,11 +134,11 @@ claude plugin uninstall fe-gen2template
 | Skill | 版本 | 说明 |
 |-------|------|------|
 | `tf-tech-spec` | 1.3.0 | 技术方案生成 — 从需求到技术方案的完整工作流 |
-| `tf-fe-cr` | — | 代码审查 — 多维度检查清单和审查流程 |
-| `kit-fe-arc` | — | 架构设计 — 根据规范和需求生成或更新全局架构协议 |
-| `kit-fe-prd-split` | — | PRD 拆分 — 将产品需求拆解为高内聚低耦合的业务模块 |
-| `kit-zyb-docs` | — | 文档获取 — 帮帮文档系统内容抓取（自动登录/Cookie 管理） |
-| `kit-zyb-pms` | — | 项目管理 — 查询 PMS 需求关联的 Bug/缺陷列表 |
+| `tf-fe-cr` | 1.0.0 | 代码审查 — 多维度检查清单和审查流程 |
+| `kit-fe-arc` | 1.0.0 | 架构设计 — 根据规范和需求生成或更新全局架构协议 |
+| `kit-fe-prd-split` | 1.0.0 | PRD 拆分 — 将产品需求拆解为高内聚低耦合的业务模块 |
+| `kit-zyb-docs` | 1.0.0 | 文档获取 — 帮帮文档系统内容抓取（自动登录/Cookie 管理） |
+| `kit-zyb-pms` | 1.0.0 | 项目管理 — 查询 PMS 需求关联的 Bug/缺陷列表 |
 
 ---
 
@@ -192,10 +192,10 @@ claude plugin uninstall fe-gen2template && claude plugin install fe-gen2template
 | `package.json` | `version` |
 | `.claude-plugin/marketplace.json` | `plugins[0].version` |
 | `skills/scaffold-sync/SKILL.md` | frontmatter `version` |
-| `skills/fast-to-template/references/skills/tf-tech-spec/SKILL.md` | frontmatter `version` |
+| `skills/fast-to-template/references/skills/*/SKILL.md` | frontmatter `version` |
 | `README.md` | 顶部版本徽章 + Skills 表格中的版本列 |
 
-> 其他 Skill（`tf-fe-cr`、`kit-fe-arc` 等）暂无 `version` 字段，后续补齐后加入本表。
+> 每个 Skill 和 Command 的 `version` 从 `1.0.0` 起步，修改内容后按规则递增。
 
 递增规则：
 

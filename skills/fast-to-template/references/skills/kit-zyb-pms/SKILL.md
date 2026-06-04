@@ -1,5 +1,6 @@
 ---
 name: kit-zyb-pms
+version: 1.0.0
 description: 查询作业帮 PMS 系统中某个需求（Story）下的所有 Bug/缺陷列表。当用户说"查一下需求下的所有 bug"、"获取 story 的缺陷列表"、"需求 ID XXX 有哪些 bug"、"查看需求关联的 bug"时必须使用此 skill。
 ---
 
