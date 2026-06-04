@@ -7,7 +7,7 @@
 硬规则：
 - 需求没有拆清楚，不进入开发。
 - 没有新鲜验证证据，不声明完成、不提交、不合并、不发布。
-- 多 agent 可以并行审阅和调查，但同一 worktree 或同一文件所有权不要并行实现。
+- 多 agent 可以并行审阅和调查，但同一文件所有权不要并行实现。
 - TypeScript 检查不要裸跑 `tsc`；进入实际前端工程目录后，优先用 `bun run <script>` 调用项目脚本，例如 `bun run typecheck`，脚本内部可包装 `vue-tsc`。
 - 本地验证命令必须尽量与 CI job 一致；不一致时要记录原因和风险。
 
@@ -17,13 +17,16 @@
 
 | 场景 | 使用 skill | 产物 / 退出条件 |
 | --- | --- | --- |
-| 读取帮帮文档 PRD | `kit-zyb-docs` | 导出 markdown，记录原始 URL、`fileId`、导出时间 |
+| 技术方案生成与需求拆解 | `kit-fe-prd-split` + `tf-tech-spec`（条件路由） | 简单需求直接 `tf-tech-spec` 生成技术方案；复杂需求先 `kit-fe-prd-split` 拆模块再生成方案 |
 | 架构概览初始化 | `kit-fe-arc` | 根据项目规范和需求生成或更新 `docs/architecture/overview.md` |
-| 复杂 PRD 拆模块 | `kit-fe-prd-split` | `docs/architecture/boundaries.md` 和 `docs/prd/<需求名>/*-需求.md` |
 | 查询需求关联 Bug | `kit-zyb-pms` | 需求关联的未关闭 Bug 列表，按 P0-P4 优先级分类统计 |
 | 本地分支 / MR / 文件审查 | `cr`（命令 `/cr`） | 审查结论、风险等级、自动修复或人工确认记录 |
 | 提交与推送 | `/commit` | 自动生成 commit message、暂存、提交并 push |
 | 前后端联调 | `yapi` MCP | 确认接口文档、请求/响应格式匹配，记录联调结果 |
+
+**条件路由规则：**
+- **简单需求**（≤10 文件 / 单模块 / bugfix / 小功能）：直接使用 `tf-tech-spec` 生成技术方案，跳过模块拆解。
+- **复杂需求**（>10 文件 / 多模块 / feat / 重构 / 多人协作）：先使用 `kit-fe-prd-split` 拆模块边界，再基于拆解结果用 `tf-tech-spec` 生成技术方案。
 
 `kit-fe-prd-split` 有前置条件：必须存在 `docs/architecture/overview.md`。如果不存在，先用 `kit-fe-arc` 生成架构概览，不能跳过模块边界分析。增量需求还必须存在 `docs/architecture/boundaries.md`；没有模块地图时，先以全新需求模式生成模块地图。
 
@@ -33,7 +36,6 @@
 | --- | --- | --- |
 | 需求澄清与方案设计 | `brainstorming` | 对新增能力或行为变更先明确目的、约束、验收标准 |
 | 写实施计划 | `writing-plans` | 产出 `docs/superpowers/plans/YYYY-MM-DD-<feature>.md`，任务必须有文件、步骤、验证命令 |
-| 隔离工作区 | `using-git-worktrees` | 先检测是否已在 worktree，再创建或复用隔离工作区 |
 | 独立任务并行调查 | `dispatching-parallel-agents` | 只用于互不共享状态的问题域 |
 | 按计划长时间执行 | `subagent-driven-development` | 推荐方式：每个任务新 implementer，之后 spec review 和 code quality review |
 | 无 subagent 时执行计划 | `executing-plans` | 串行执行计划，遇到 blocker 立即停下 |
@@ -56,16 +58,14 @@
 
 ```mermaid
 flowchart TD
-  A["需求输入 PRD / Story / Bug"] --> B["资料获取: kit-zyb-docs"]
-  B --> C["需求拆解: kit-fe-prd-split"]
+  A["需求输入 PRD / Story / Bug"] --> C["技术方案生成&需求拆解: kit-fe-prd-split & tf-tech-spec"]
   C --> D["实施计划: writing-plans"]
-  D --> E["隔离开发: using-git-worktrees"]
-  E --> F["长任务执行: subagent-driven-development"]
+  D --> F["长任务执行: subagent-driven-development"]
   F --> G["本地验证: lint / typecheck / test / build / browser"]
   G --> H["前后端联调: yapi"]
-  H --> I["代码审查: cr"]
-  H --> I["提交与 push: /commit"]
-  I --> J["CI / 部署: 内部 GitLab"]
+  H --> I1["代码审查: cr"]
+  I1 --> I2["提交与 push: /commit"]
+  I2 --> J["CI / 部署: 内部 GitLab"]
   J --> K["目标 URL 冒烟"]
   K --> L["PMS Bug 查询与修复: kit-zyb-pms"]
   L --> M["最终收尾: finishing-a-development-branch"]
@@ -84,7 +84,7 @@ flowchart TD
 | 需求类型 | bugfix / hotfix / chore / 小功能 | feat / 重构 / 多人协作 |
 | 预估 agent 数 | 1 个 | 2+ 个 |
 
-#### 快速路径（4 步）
+#### 快速路径（3 步）
 
 ```mermaid
 flowchart LR
@@ -93,9 +93,9 @@ flowchart LR
   C --> D["提交+push+CI"]
 ```
 
-跳过：多 agent 并行、worktree 隔离、spec/quality 分层审查、独立冒烟阶段。单 agent 直接在当前分支开发，用 `cr`（命令 `/cr`）做一轮审查即可。
+跳过：多 agent 并行、spec/quality 分层审查、独立冒烟阶段。单 agent 直接在当前分支开发，用 `cr`（命令 `/cr`）做一轮审查即可。
 
-#### 完整路径（13 步）
+#### 完整路径（11 步）
 
 即上方主流程，适用于多模块、多 agent 并行的复杂需求。
 
@@ -109,7 +109,7 @@ flowchart LR
 # <需求名> 状态
 
 **需求 ID:** <PMS Story ID>
-**PRD:** <帮帮文档 URL / fileId>
+**PRD:** <用户提供的 PRD 链接或内容>
 **主分支:** <main / master / release/...>
 **集成分支:** <type>/<feature>
 **Base SHA:** <git rev-parse HEAD>
@@ -119,9 +119,9 @@ flowchart LR
 
 ## 任务状态
 
-| 任务 | Agent / Owner | Worktree | 文件所有权 | 状态 | 最新提交 | 验证证据 |
-| --- | --- | --- | --- | --- | --- | --- |
-| 模块 A | implementer-a | .worktrees/a | src/a/** | TODO | - | - |
+| 任务 | Agent / Owner | 文件所有权 | 状态 | 最新提交 | 验证证据 |
+| --- | --- | --- | --- | --- | --- |
+| 模块 A | implementer-a | src/a/** | TODO | - | - |
 
 ## 决策记录
 
@@ -152,18 +152,16 @@ git log --oneline -10
 
 | 阶段 | 进入条件 | 必做动作 | 退出条件 | 失败处理 |
 | --- | --- | --- | --- | --- |
-| 需求准入 | 有 PRD / Story / Bug 来源 | 用 `kit-zyb-docs` 导出 PRD，记录需求 ID 和验收标准 | 输入资料可追溯 | 缺访问权限则停下让用户登录或授权 |
-| 需求拆解 | 有 PRD 和架构概览 | 用 `kit-fe-prd-split` 拆模块、契约、公共能力 | 产出模块地图和子 PRD | 缺 `docs/architecture/overview.md` 则先补架构概览 |
-| 技术方案 | 模块边界基本清楚 | 用 `tf-tech-spec` 生成前端技术方案 | 接口、状态、权限、验证、风险可追踪 | 未知项进待确认表，阻断项不进入开发 |
-| 计划固化 | 模块边界清楚 | 用 `writing-plans` 写任务计划和验证命令 | 每个任务 2-5 分钟粒度，有明确文件和测试 | 计划有歧义则先修计划，不进入实现 |
-| 工作区准备 | 计划已批准 | 用 `using-git-worktrees` 检测或创建 worktree | 记录 worktree、分支、base sha、baseline 验证 | baseline 失败先确认是历史问题还是当前任务阻断 |
-| 任务执行 | worktree 可用 | 用 `subagent-driven-development` 派发任务 | 每个任务通过实现、自测、spec review、quality review | `BLOCKED` 时补上下文、拆任务、升级模型或人工决策 |
-| 集成验证 | 子任务均 `VERIFIED` | 串行合并 / rebase，跑全量验证 | 本地全量验证通过 | 失败则用 `systematic-debugging` 定位，不可带病提交 |
+| 需求准入 | 有 PRD / Story / Bug 来源 | 记录需求 ID 和验收标准，用户直接提供 PRD 内容或链接 | 输入资料可追溯 | 缺资料则停下让用户补充 |
+| 技术方案与拆解 | 有 PRD 和架构概览 | 按条件路由：简单需求直接用 `tf-tech-spec`；复杂需求先用 `kit-fe-prd-split` 拆模块再生成方案 | 技术方案完成，接口、状态、权限、验证、风险可追踪 | 缺 `docs/architecture/overview.md` 则先补架构概览 |
+| 计划固化 | 方案已批准 | 用 `writing-plans` 写任务计划和验证命令 | 每个任务 2-5 分钟粒度，有明确文件和测试 | 计划有歧义则先修计划，不进入实现 |
+| 任务执行 | 计划已批准 | 用 `subagent-driven-development` 派发任务 | 每个任务通过实现、自测、spec review、quality review | `BLOCKED` 时补上下文、拆任务、升级模型或人工决策 |
+| 集成验证 | 子任务均 `VERIFIED` | 串行合并，跑全量验证 | 本地全量验证通过 | 失败则用 `systematic-debugging` 定位，不可带病提交 |
 | 前后端联调 | 本地验证通过 | 用 `yapi` MCP 查接口文档，确认请求/响应格式与代码匹配 | 接口字段、类型、状态码与文档一致 | 接口不匹配则修改代码或联系后端更新文档 |
 | 审查提交 | 联调通过 | 用 `cr`（命令 `/cr`）审查，再用 `/commit` 提交并 push | 审查问题关闭，提交范围明确 | 高风险变更需人工确认 |
 | CI / 部署 | 已 push 或 MR 创建 | 查看 GitLab pipeline，部署到目标环境，记录 commit SHA | CI 全绿，部署环境 commit 匹配 | CI 失败走日志定位，部署失败停下 |
 | 冒烟 / PMS | 部署完成 | 用 Browser/Chrome 冒烟，用 `kit-zyb-pms` 查 Bug | 核心路径通过，P0-P2 无阻断 | 修 Bug 后回到本地验证和提交流程 |
-| 收尾 | 发布闭环完成 | 用 `finishing-a-development-branch` 选择合并、MR 或保留 | 分支、MR、worktree 状态清楚 | 丢弃必须明确确认 |
+| 收尾 | 发布闭环完成 | 用 `finishing-a-development-branch` 选择合并、MR 或保留 | 分支、MR 状态清楚 | 丢弃必须明确确认 |
 
 ## 4. 多 agent 交叉评审机制
 
@@ -171,7 +169,7 @@ git log --oneline -10
 
 | 角色 | 职责 | 禁止事项 |
 | --- | --- | --- |
-| Controller | 拆任务、裁剪上下文、分配 worktree、合并结果、最终判断 | 不把自己的实现当作最终评审 |
+| Controller | 拆任务、裁剪上下文、分配文件所有权、合并结果、最终判断 | 不把自己的实现当作最终评审 |
 | Implementer | 按单个任务实现、测试、提交小步变更 | 不跨文件所有权改其他模块 |
 | Debug Agent | 对独立失败域做系统化排障 | 不在未定位前直接改代码 |
 
@@ -188,37 +186,16 @@ git log --oneline -10
 - 同一个文件集合的实现。
 - 同一个公共 API 的不同方向修改。
 - 数据结构 / 路由 / store / 构建配置等共享契约未稳定时的多方改动。
-- 多个 worktree 同时 merge 到集成分支。
 
 任务分配前必须维护文件所有权矩阵：
 
-| 模块 / 任务 | Worktree | Owner | 允许修改 | 禁止修改 | 集成顺序 |
-| --- | --- | --- | --- | --- | --- |
-| 示例模块 | `.worktrees/example` | agent-a | `src/modules/example/**` | `src/shared/**` 未经确认不可改 | 1 |
+| 模块 / 任务 | Owner | 允许修改 | 禁止修改 | 集成顺序 |
+| --- | --- | --- | --- | --- |
+| 示例模块 | agent-a | `src/modules/example/**` | `src/shared/**` 未经确认不可改 | 1 |
 
-## 5. Worktree、分支与合并策略
+## 5. 分支与合并策略
 
-### 5.1 创建前检测
-
-执行计划前先检测是否已经在隔离 worktree：
-
-```bash
-GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
-GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
-git rev-parse --show-superproject-working-tree 2>/dev/null
-git branch --show-current
-git status --short
-```
-
-判定规则：如果 `GIT_DIR != GIT_COMMON` 且不在 submodule 中，说明已经处于 linked worktree，不要再嵌套创建 worktree。
-
-如果使用项目内 `.worktrees/`，必须确认该目录被 ignore；否则先补 `.gitignore` 并提交。
-
-```bash
-git check-ignore -q .worktrees || git check-ignore -q worktrees
-```
-
-### 5.2 命名约定
+### 5.1 命名约定
 
 默认分支命名：`<type>/<name>`。
 
@@ -235,15 +212,14 @@ git check-ignore -q .worktrees || git check-ignore -q worktrees
 建议：
 - 集成分支：`feat/<需求名>`、`bugfix/<缺陷名>` 或 `hotfix/<线上问题>`。
 - 模块分支：`feat/<需求名>-<模块名>` 或 `bugfix/<缺陷名>-<模块名>`。
-- Worktree 路径：`.worktrees/<需求名>-<模块名>`。
 
-### 5.3 分支创建门禁
+### 5.2 分支创建门禁
 
 创建分支前必须先确定 `type` 和 `name`，并校验最终分支名符合 `<type>/<name>`。`name` 建议使用需求 ID、Bug ID 或英文 kebab-case 摘要，避免空格和特殊字符。
 
 允许的默认 `type`：`feat`、`bugfix`、`hotfix`、`refactor`、`docs`、`chore`。如团队使用其他类型，必须仍保持 `<type>/<name>` 形态。
 
-普通分支创建：
+分支创建：
 
 ```bash
 TYPE=feat
@@ -258,22 +234,6 @@ esac
 git switch -c "$BRANCH"
 ```
 
-Worktree 分支创建：
-
-```bash
-TYPE=feat
-NAME=<story-id-or-kebab-summary>
-BRANCH="${TYPE}/${NAME}"
-WORKTREE_PATH=".worktrees/${NAME}"
-
-case "$BRANCH" in
-  feat/*|bugfix/*|hotfix/*|refactor/*|docs/*|chore/*) ;;
-  *) echo "Invalid branch name: $BRANCH"; exit 1 ;;
-esac
-
-git worktree add "$WORKTREE_PATH" -b "$BRANCH"
-```
-
 创建后必须确认：
 
 ```bash
@@ -282,26 +242,19 @@ git branch --show-current
 
 如果当前分支不符合 `<type>/<name>`，不能进入开发、push 或创建 MR。
 
-每个 worktree 记录：
+每个分支记录：
 - `base branch`
 - `base sha`
-- `worktree path`
 - `owner`
 - `allowed files`
 - `baseline verification`
 
-### 5.4 合并与清理
+### 5.3 合并规则
 
-合并规则：
 - 由集成 owner 串行合并，不允许多个 agent 同时合并。
 - 合并前更新 base，检查冲突风险。
 - 每合并一个模块跑相关最小验证；全部合并后跑全量验证。
 - 冲突解决后必须重新跑受影响验证，不能复用冲突前结果。
-
-清理规则：
-- 只有本地 merge 成功，或明确选择 discard 并确认后，才删除 worktree。
-- 如果创建了 MR，保留 worktree 供返修。
-- 不要删除外部 harness 管理的 worktree。
 
 ## 6. 本地验证与 CI 对齐
 
@@ -394,7 +347,6 @@ bun run build
 | P2 Bug 延期 | 自动标记延期 + 通知 owner，默认允许带风险发布 | P0/P1 不可延期 |
 | BLOCKED 处理 | 自动尝试：补上下文 → 拆任务 → 升级模型；三次失败后停下 | 三次自动尝试均失败 |
 | force push | — | 必须人工确认 |
-| worktree 丢弃 | — | 必须人工确认 |
 
 ## 8. CI / CD 与部署
 
@@ -492,7 +444,7 @@ CI 成功标准：
 
 以下为**阻断项**（任一未通过则不能提交/发布），agent 可自动检查：
 
-- [ ] **计划就绪**：PRD 已导出、架构概览存在、实施计划已写入（快速路径可省略拆模块）
+- [ ] **计划就绪**：PRD 已确认、架构概览存在、实施计划已写入（快速路径可省略拆模块）
 - [ ] **分支合规**：分支名符合 `<type>/<name>`，未直接 push 到 protected 分支
 - [ ] **本地验证全通过**：lint 0 error、typecheck 0 error、test 0 failed、build 成功
 - [ ] **审查通过**：`cr` 审查完成，Critical / Important 问题已关闭
@@ -501,7 +453,7 @@ CI 成功标准：
 - [ ] **部署验证**：目标环境运行目标 commit，关键资源/接口正常
 - [ ] **冒烟通过**：核心路径可完成，控制台无阻断 error，关键接口无 4xx/5xx
 - [ ] **PMS 无阻断**：P0/P1 已关闭，P2 无未审批延期
-- [ ] **收尾完成**：MR 已创建、worktree 状态清楚、风险和延期项有 owner
+- [ ] **收尾完成**：MR 已创建、分支状态清楚、风险和延期项有 owner
 - [ ] **安全检查**：未泄露凭据、Cookie、Token、内部敏感链接或未脱敏截图
 
 ### 建议检查（非阻断，但推荐执行）
@@ -516,12 +468,11 @@ CI 成功标准：
 ```markdown
 ## 本次需求执行记录
 
-1. 资料获取
+1. 需求输入
    - PRD:
    - PMS Story:
-   - 导出文件:
 
-2. 拆解产物
+2. 技术方案与拆解产物
    - 模块地图:
    - 子 PRD:
    - 公共能力:
@@ -532,7 +483,7 @@ CI 成功标准：
    - Base SHA:
 
 4. 并行任务
-   - 任务 / Worktree / Owner / 文件所有权:
+   - 任务 / Owner / 文件所有权:
 
 5. 验证证据
    - lint:

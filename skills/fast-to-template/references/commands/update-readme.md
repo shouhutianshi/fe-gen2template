@@ -27,7 +27,7 @@ cat package.json | python3 -c "import json,sys; s=json.load(sys.stdin).get('scri
 | 快速开始命令 | `package.json` scripts |
 | 命令表 | `package.json` scripts，只列有意义的项目（跳过内部脚本） |
 | E2E 依赖 | `e2e/` 目录是否存在 |
-| Python 依赖 | `.claude/skills/kit-zyb-docs/` 是否存在 |
+| Python 依赖 | `.claude/skills/kit-zyb-docs/` 或 `kit-zyb-pms/` 是否存在 |
 | 文档链接 | `docs/` 下实际存在的文件 |
 
 ### 不修改的部分

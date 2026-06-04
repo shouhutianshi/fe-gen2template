@@ -14,10 +14,8 @@
 
 | 用途 | 工具 |
 | --- | --- |
-| PRD 读取 | `kit-zyb-docs` |
 | 架构概览 | `kit-fe-arc` |
-| PRD 拆模块 | `kit-fe-prd-split` |
-| 技术方案 | `tf-tech-spec` |
+| 技术方案与需求拆解 | `kit-fe-prd-split` + `tf-tech-spec`（条件路由） |
 | 代码审查 | `cr`（命令 `/cr`） |
 | Bug 查询 | `kit-zyb-pms` |
 | 提交推送 | `/commit` |

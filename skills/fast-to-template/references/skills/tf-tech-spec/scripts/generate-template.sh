@@ -111,6 +111,92 @@ cat > "$TARGET" << 'TEMPLATE'
 | --- | --- | --- | --- | --- |
 |  | 骨架屏/Spin | 插图+引导文案 | el-message 通知 | PC=Element Plus / H5=Vant 4 |
 
+### UI 规格详表
+
+> 参照 `docs/conventions/styles.md` 的 @theme 设计令牌体系。**禁止**写死像素值（`font-size: 14px`）和色值（`color: #333`），只允许设计令牌引用或语义化描述。无设计稿时，非标准布局必须标记为待确认项。
+
+#### UI 令牌映射表
+
+列出本方案涉及的 @theme 设计令牌与 UI 元素的对应关系。
+
+| 令牌类别 | @theme 令牌名 | Tailwind 用法 | 应用元素 | 数值（仅作参考） |
+| --- | --- | --- | --- | --- |
+| 字号 | `--font-size-base` | `text-base` | 全局正文 | 16px |
+| 字号 | `--font-size-sm` | `text-sm` | 表格单元格、辅助文字 | 14px |
+| 字色 | `--color-text-primary` | `text-gray-900` | 标题、主文案 | — |
+| 字色 | `--color-text-secondary` | `text-gray-500` | 描述、占位符 | — |
+| 间距 | `--spacing-4` | `p-4` / `gap-4` | 卡片内边距 | 16px |
+| 圆角 | `--radius-md` | `rounded-md` | 卡片、弹窗 | 6px |
+
+#### 组件规格表
+
+逐页列出组件的规格详情。简单需求（≤10 文件 / 单页）只填必填列，复杂需求全量填写。
+
+| 组件名 | 父组件 | 子组件 | UI 组件库 | 字号令牌 | 字色令牌 | CSS Class | 空间定位 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| _必填_ | _必填_ | _选填_ | _必填_ | _选填_ | _选填_ | _选填_ | _必填_ |
+
+列说明：
+- **组件名**：Vue 组件文件名（kebab-case），如 `user-table`
+- **父组件**：直接父组件名，根组件填页面路由名
+- **子组件**：直接子组件列表，如 `UserAvatar, UserStatus`
+- **UI 组件库**：具体 Element Plus / Vant 组件名，如 `el-table`、`van-list`、`el-button`
+- **字号令牌**：设计令牌引用，如 `text-sm`；无设计稿时填「待确认」
+- **字色令牌**：设计令牌引用，如 `text-gray-700`；无设计稿时填「待确认」
+- **CSS Class**：使用的语义 class 或 `@apply` 组合；如 `@apply flex items-center gap-2`
+- **空间定位**：描述与兄弟组件的相对位置，如「筛选栏下方」「操作栏右侧」「统计卡与列表之间」
+
+#### 组件关系图（复杂需求必填）
+
+复杂需求（多模块 / 多页面 / 组件 >10 个）必须补充组件关系图，描述组件树结构和空间布局。
+
+Mermaid 组件树模板：
+
+```mermaid
+graph TD
+  Page["页面组件"] --> FilterBar["筛选栏"]
+  Page --> StatCards["统计卡区域"]
+  Page --> ActionBar["操作栏"]
+  Page --> DataTable["数据表格"]
+
+  FilterBar --> DateRange["el-date-picker"]
+  FilterBar --> StatusSelect["el-select"]
+
+  StatCards --> CardA["统计卡 A"]
+  StatCards --> CardB["统计卡 B"]
+
+  ActionBar --> AddBtn["el-button: 新增"]
+  ActionBar --> ExportBtn["el-button: 导出"]
+
+  DataTable --> NameCell["名称 + UserAvatar"]
+  DataTable --> StatusCell["UserStatus"]
+  DataTable --> ActionCell["操作按钮组"]
+```
+
+ASCII 空间布局模板（描述页面从上到下的布局关系）：
+
+```
+┌──────────────────────────────────────────┐
+│ 筛选栏 (FilterBar)                        │
+│  [日期范围] [状态下拉]  [搜索] [重置]      │
+├──────────────────────────────────────────┤
+│ 统计卡区域 (StatCards)  ← flex row        │
+│  ┌────┐ ┌────┐ ┌────┐ ┌────┐             │
+│  │ A  │ │ B  │ │ C  │ │ D  │             │
+│  └────┘ └────┘ └────┘ └────┘             │
+├──────────────────────────────────────────┤
+│ 操作栏 (ActionBar)  ← flex justify-between│
+│  [新增] [导出]           [批量操作 ▼]      │
+├──────────────────────────────────────────┤
+│ 数据表格 (DataTable)                       │
+│  名称 | 状态 | 创建时间 | 操作             │
+│  ─────────────────────────────            │
+│  ···                                     │
+├──────────────────────────────────────────┤
+│ 分页器 (el-pagination)  ← 右对齐          │
+└──────────────────────────────────────────┘
+```
+
 ## 二、全局工程方案
 
 ### 1. 应用边界与目录建议
