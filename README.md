@@ -1,6 +1,8 @@
 # fe-gen2template
 
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/shouhutianshi/fe-gen2template)
+[![Plugin](https://img.shields.io/badge/plugin-1.1.0-blue.svg)](https://github.com/shouhutianshi/fe-gen2template)
+[![tf-tech-spec](https://img.shields.io/badge/tf--tech--spec-1.3.0-green.svg)](skills/fast-to-template/references/skills/tf-tech-spec/SKILL.md)
+[![scaffold-sync](https://img.shields.io/badge/scaffold--sync-1.1.0-green.svg)](skills/scaffold-sync/SKILL.md)
 
 对话式前端项目脚手架，[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 插件。一键生成完整的 Vue 3 + Vite + TypeScript 项目，包含 AI 辅助开发配置、内部 Skill 和规范文档。
 
@@ -129,15 +131,14 @@ claude plugin uninstall fe-gen2template
 
 选择「包含内部 Skill」时，以下 Skills 会被复制到项目：
 
-| Skill | 说明 |
-|-------|------|
-| `tf-tech-spec` | 技术方案生成 — 从需求到技术方案的完整工作流 |
-| `tf-fe-cr` | 代码审查 — 多维度检查清单和审查流程 |
-| `tf-fe-handoff` | 交接文档 — 自动生成项目交接说明 |
-| `kit-fe-arc` | 架构设计 — 前端架构决策辅助 |
-| `kit-fe-prd-split` | PRD 拆分 — 将产品需求拆解为可执行的任务 |
-| `kit-zyb-docs` | 文档获取 — 内部文档系统内容抓取 |
-| `kit-zyb-pms` | 项目管理 — PMS 系统集成、Bug 解析 |
+| Skill | 版本 | 说明 |
+|-------|------|------|
+| `tf-tech-spec` | 1.3.0 | 技术方案生成 — 从需求到技术方案的完整工作流 |
+| `tf-fe-cr` | — | 代码审查 — 多维度检查清单和审查流程 |
+| `kit-fe-arc` | — | 架构设计 — 根据规范和需求生成或更新全局架构协议 |
+| `kit-fe-prd-split` | — | PRD 拆分 — 将产品需求拆解为高内聚低耦合的业务模块 |
+| `kit-zyb-docs` | — | 文档获取 — 帮帮文档系统内容抓取（自动登录/Cookie 管理） |
+| `kit-zyb-pms` | — | 项目管理 — 查询 PMS 需求关联的 Bug/缺陷列表 |
 
 ---
 
@@ -190,7 +191,11 @@ claude plugin uninstall fe-gen2template && claude plugin install fe-gen2template
 | `.claude-plugin/plugin.json` | `version` |
 | `package.json` | `version` |
 | `.claude-plugin/marketplace.json` | `plugins[0].version` |
-| 对应 Skill 的 `SKILL.md` | frontmatter `version` |
+| `skills/scaffold-sync/SKILL.md` | frontmatter `version` |
+| `skills/fast-to-template/references/skills/tf-tech-spec/SKILL.md` | frontmatter `version` |
+| `README.md` | 顶部版本徽章 + Skills 表格中的版本列 |
+
+> 其他 Skill（`tf-fe-cr`、`kit-fe-arc` 等）暂无 `version` 字段，后续补齐后加入本表。
 
 递增规则：
 
