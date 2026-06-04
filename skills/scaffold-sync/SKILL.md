@@ -21,20 +21,20 @@ description: >-
 
 ## 缓存刷新检查
 
-在定位缓存路径之前，检查源仓库是否有更新，确保同步最新版本。
+在定位缓存路径之前，检查是否有插件更新，确保同步最新版本。支持两种刷新方式。
 
-### 1. 定位源仓库
-
-优先使用本地仓库，备选从 `marketplace.json` 读取：
+### 1. 检测是否需要刷新
 
 ```bash
 REPO_DIR=~/code/fe-gen2template
 ```
 
-- `$REPO_DIR` 存在且是 git 仓库 → 使用本地仓库
-- 不存在 → 跳过刷新，提示用户可运行插件仓库的 `scripts/install.sh` 获取最新版
+- `$REPO_DIR` 存在且是 git 仓库 → 走**本地仓库刷新**
+- 不存在 → 走**GitHub 直接刷新**
 
-### 2. 检测是否有更新
+两种方式都需要先检测当前缓存版本与远程最新版本的差异。如果无法检测差异（如网络不通），询问用户是否强制刷新。
+
+### 2. 本地仓库刷新
 
 ```bash
 cd "$REPO_DIR"
@@ -46,15 +46,24 @@ REMOTE=$(git rev-parse origin/master)
 - `LOCAL` = `REMOTE` → 缓存已是最新，跳过刷新
 - `LOCAL` ≠ `REMOTE` → 有新提交，询问用户是否刷新缓存
 
-### 3. 执行刷新（用户确认后）
-
-按顺序执行，任一步骤失败则中止并提示手动处理：
+用户确认后执行：
 
 ```bash
 cd "$REPO_DIR" && git pull --ff-only origin master
 claude plugin marketplace add "$REPO_DIR"
-claude plugin install fe-gen2template
+claude plugin uninstall fe-gen2template && claude plugin install fe-gen2template
 ```
+
+### 3. GitHub 直接刷新
+
+无需本地 clone，直接从 GitHub 拉取最新版：
+
+```bash
+claude plugin marketplace add https://github.com/shouhutianshi/fe-gen2template
+claude plugin uninstall fe-gen2template && claude plugin install fe-gen2template
+```
+
+### 4. 刷新后报告
 
 刷新成功后报告版本变化：
 
@@ -66,14 +75,14 @@ NEW_VERSION=$(ls -d ~/.claude/plugins/cache/fe-gen2template/fe-gen2template/*/ 2
 
 向用户报告：`插件已从 v${OLD_VERSION} 刷新到 v${NEW_VERSION}`。
 
-### 4. 失败处理
+### 5. 失败处理
 
 | 场景 | 处理 |
 |---|---|
-| 源仓库不存在 | 跳过刷新，使用当前缓存 |
-| `git fetch` 失败（网络） | 跳过刷新，警告缓存可能过时 |
+| 本地仓库不存在 | 走 GitHub 直接刷新 |
+| `git fetch` 失败（网络） | 走 GitHub 直接刷新 |
 | `git pull --ff-only` 失败（分支分歧） | 中止，提示手动解决冲突后重试 |
-| `marketplace add` 或 `plugin install` 失败 | 中止，提示手动运行 `scripts/install.sh` |
+| `marketplace add` 或 `plugin install` 失败 | 中止，提示手动运行安装脚本 |
 
 > 注意：刷新后缓存目录版本号可能变化（如 1.0.0 → 1.1.0），后续「定位插件源」步骤会在刷新后重新定位，无需特殊处理。
 

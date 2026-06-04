@@ -5,10 +5,12 @@
 ## 快速开始
 
 ```bash
-# 安装
-git clone git@git.zuoyebang.cc:toufang/fe-gen2template.git ~/code/fe-gen2template
-claude plugin marketplace add ~/code/fe-gen2template
+# 一键安装（无需 clone，直接从 GitHub 注册）
+claude plugin marketplace add https://github.com/shouhutianshi/fe-gen2template
 claude plugin install fe-gen2template
+
+# 或使用安装脚本
+curl -sL https://raw.githubusercontent.com/shouhutianshi/fe-gen2template/master/scripts/install.sh | bash
 
 # 使用（任意目录下）
 claude
@@ -17,8 +19,7 @@ claude
 
 ### 前提条件
 
-- Claude Code、Bun、Git 已安装
-- 内网 / VPN 连接（需访问 `git.zuoyebang.cc`）
+- Claude Code、Bun 已安装
 
 ### 对话选项
 
@@ -34,9 +35,14 @@ claude
 ### 更新插件
 
 ```bash
+# 方式一：重新安装（从 GitHub 拉取最新版）
+claude plugin marketplace add https://github.com/shouhutianshi/fe-gen2template
+claude plugin uninstall fe-gen2template && claude plugin install fe-gen2template
+
+# 方式二：本地开发更新（已 clone 仓库）
 cd ~/code/fe-gen2template && git pull
 claude plugin marketplace add .
-claude plugin install fe-gen2template
+claude plugin uninstall fe-gen2template && claude plugin install fe-gen2template
 ```
 
 ### 卸载插件
@@ -53,7 +59,7 @@ claude plugin uninstall fe-gen2template
 | `claude plugin install <name>` | 安装插件 |
 | `claude plugin uninstall <name>` | 卸载插件 |
 | `claude plugin update <name>` | 更新到最新版 |
-| `claude plugin marketplace add <path>` | 注册 marketplace |
+| `claude plugin marketplace add <path\|url>` | 注册 marketplace（支持本地路径或 GitHub URL） |
 | `claude plugin marketplace remove <name>` | 移除 marketplace 注册 |
 
 ## 生成项目内容
