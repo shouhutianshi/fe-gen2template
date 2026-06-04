@@ -1,27 +1,32 @@
 # fe-gen2template
 
-对话式前端项目脚手架，Claude Code 插件。一键生成完整的 Vue 3 + Vite + TypeScript 项目。
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/shouhutianshi/fe-gen2template)
+
+对话式前端项目脚手架，[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 插件。一键生成完整的 Vue 3 + Vite + TypeScript 项目，包含 AI 辅助开发配置、内部 Skill 和规范文档。
 
 ## 快速开始
 
 ```bash
-# 一键安装（无需 clone，直接从 GitHub 注册）
+# 安装（两行命令，无需 clone）
 claude plugin marketplace add https://github.com/shouhutianshi/fe-gen2template
 claude plugin install fe-gen2template
 
-# 或使用安装脚本
-curl -sL https://raw.githubusercontent.com/shouhutianshi/fe-gen2template/master/scripts/install.sh | bash
-
-# 使用（任意目录下）
+# 使用 — 任意目录下打开 Claude Code
 claude
 > /scaffold
 ```
 
-### 前提条件
+**前提条件**：Claude Code、Bun 已安装。
 
-- Claude Code、Bun 已安装
+### 一键安装脚本
+
+```bash
+curl -sL https://raw.githubusercontent.com/shouhutianshi/fe-gen2template/master/scripts/install.sh | bash
+```
 
 ### 对话选项
+
+运行 `/scaffold` 后会收集以下信息：
 
 | # | 问题 | 选项 |
 |---|------|------|
@@ -32,106 +37,170 @@ claude
 | 5 | 状态管理 | 包含 Pinia / 不包含 |
 | 6 | 内部 Skill | 包含 / 不包含 |
 
-### 更新插件
+### 更新 / 卸载
 
 ```bash
-# 方式一：重新安装（从 GitHub 拉取最新版）
+# 更新到最新版（从 GitHub 重新安装）
 claude plugin marketplace add https://github.com/shouhutianshi/fe-gen2template
 claude plugin uninstall fe-gen2template && claude plugin install fe-gen2template
 
-# 方式二：本地开发更新（已 clone 仓库）
-cd ~/code/fe-gen2template && git pull
-claude plugin marketplace add .
-claude plugin uninstall fe-gen2template && claude plugin install fe-gen2template
-```
+# 或在已生成的项目中直接同步最新 Skill/规范
+> /scaffold-sync
 
-### 卸载插件
-
-```bash
+# 卸载插件
 claude plugin uninstall fe-gen2template
 ```
 
-### 常用插件命令
+---
 
-| 命令 | 说明 |
-|------|------|
-| `claude plugin list` | 查看已安装插件 |
-| `claude plugin install <name>` | 安装插件 |
-| `claude plugin uninstall <name>` | 卸载插件 |
-| `claude plugin update <name>` | 更新到最新版 |
-| `claude plugin marketplace add <path\|url>` | 注册 marketplace（支持本地路径或 GitHub URL） |
-| `claude plugin marketplace remove <name>` | 移除 marketplace 注册 |
-
-## 生成项目内容
+## 生成的项目包含什么
 
 ### 工程基础
 
-- Vue 3 + Vite + TypeScript
-- Element Plus（PC）/ Vant 4（H5）/ 两者
-- Tailwind CSS v4
-- Axios 封装（拦截器、重试、取消、类型定义）
-- Pinia 状态管理（可选）
-- ESLint + Prettier
-- Vitest 单元测试 / Playwright E2E（可选）
-- .gitlab-ci.yml + Dockerfile
+- **Vue 3 + Vite + TypeScript** — 现代前端工程三件套
+- **Element Plus / Vant 4 / 两者** — 按项目类型选择 UI 库
+- **Tailwind CSS v4** — 原子化样式
+- **Axios 封装** — 拦截器、重试、取消、类型定义
+- **Pinia** — 状态管理（可选）
+- **ESLint + Prettier** — 代码规范
+- **Vitest / Playwright** — 单元测试 / E2E 测试（可选）
+- **CI/CD** — `.gitlab-ci.yml` + `Dockerfile`
 
-### AI 辅助开发（CLAUDE.md）
+### AI 辅助开发配置（CLAUDE.md）
 
 - **规范渐进加载** — 修改代码前按场景自动读取对应规范
 - **路径分流** — 小任务 4 步快速路径，复杂任务走完整流程
-- **验证门禁** — lint / typecheck / test / build 通过标准表格化
+- **验证门禁** — lint / typecheck / test / build 表格化标准
 - **高风险变更清单** — 公共 API、权限、构建配置等需人工确认
 
-### 规范文档（docs/）
+### 开发规范文档（docs/conventions/）
 
-9 份开发规范，覆盖组件、样式、测试、API 联调、代码审查、Git、验证、并行开发、验收用例生成。
+9 份开发规范，覆盖完整开发生命周期：
+
+| 规范 | 说明 |
+|------|------|
+| 组件规范 | 组件设计、命名、Props/Emits 定义 |
+| 样式规范 | Tailwind 使用、CSS 变量、作用域 |
+| 测试规范 | 单元测试、E2E 测试策略和写法 |
+| API 联调 | 接口对接、Mock、错误处理 |
+| 代码审查 | CR 流程和检查清单 |
+| Git 规范 | 分支命名、提交信息格式 |
+| 验证规范 | 上线前验证清单 |
+| 并行开发 | 多人协作冲突避免 |
+| 验收用例 | 验收测试用例生成 |
+
+---
 
 ## Slash Commands
 
-所有生成的项目都包含：
+### 所有项目都包含
 
 | 命令 | 说明 |
 |------|------|
 | `/update-readme` | 同步 README.md 和 CLAUDE.md 与项目真实状态 |
 
-此外，`/scaffold-sync` 是**插件级命令**，无需安装到项目，任意已生成项目都可直接调用，用于同步最新 Skill/规范。**注意**：`scaffold-sync` 从插件缓存读取内容，修改插件源码后需先重新安装插件（`claude plugin install fe-gen2template`）才能同步到最新。
+### 插件级命令（无需安装到项目）
 
-选择"包含内部 Skill"（Q6）时额外包含：
+| 命令 | 说明 |
+|------|------|
+| `/scaffold` | 对话式创建新前端项目 |
+| `/scaffold-sync` | 同步最新 Skill/规范到已生成的项目（自动检测并刷新缓存） |
+
+### 选择「包含内部 Skill」时额外包含
 
 | 命令 | 说明 |
 |------|------|
 | `/commit` | Git 提交并自动推送 |
 | `/cr` | 代码审查（交互式修复 / 多 agent 对抗审查） |
 | `/conventions` | 一次性预加载全部开发规范 |
-| `/verify` | 执行本地验证清单并输出结果表格 |
-| `/debug` 等 | 调试、架构设计、学习模式等 9 个命令 |
+| `/investigate` | 并行调查 — 多个 Agent 同时排查不同方向 |
+| `/gen-goal` | 生成可评审的目标，收敛任务方向 |
+| `/debug` | 调试模式 |
+| `/expert-mode` | 专家模式 |
+| `/first-principles` | 第一性原理解释 |
+| `/think-more` | 系统思维模板 |
+| `/thinking-partner` | 批判性思考搭档 |
+| `/research-brief-generator` | 研究简报生成器 |
+| `/meta-suggestion-keyword-optimization` | 提示词优化器 |
+
+---
+
+## 插件内部 Skills
+
+选择「包含内部 Skill」时，以下 Skills 会被复制到项目：
+
+| Skill | 说明 |
+|-------|------|
+| `tf-tech-spec` | 技术方案生成 — 从需求到技术方案的完整工作流 |
+| `tf-fe-cr` | 代码审查 — 多维度检查清单和审查流程 |
+| `tf-fe-handoff` | 交接文档 — 自动生成项目交接说明 |
+| `kit-fe-arc` | 架构设计 — 前端架构决策辅助 |
+| `kit-fe-prd-split` | PRD 拆分 — 将产品需求拆解为可执行的任务 |
+| `kit-zyb-docs` | 文档获取 — 内部文档系统内容抓取 |
+| `kit-zyb-pms` | 项目管理 — PMS 系统集成、Bug 解析 |
+
+---
 
 ## 目录结构
 
 ```
 fe-gen2template/
 ├── .claude-plugin/
-│   ├── plugin.json           # 插件元信息
-│   └── marketplace.json      # marketplace 注册
-├── skills/fast-to-template/
-│   ├── SKILL.md              # /scaffold 对话逻辑
-│   ├── scripts/generate.sh   # 项目生成脚本
-│   └── references/
-│       ├── commands/          # Slash 命令
-│       ├── skills/            # 子技能
-│       ├── docs/              # 规范文档模板
-│       ├── types/             # 项目类型模板（pc/h5/both）
-│       └── extras/            # 额外模块（E2E 等）
-├── scripts/install.sh
+│   ├── plugin.json              # 插件元信息
+│   └── marketplace.json         # marketplace 注册
+├── skills/
+│   ├── fast-to-template/        # /scaffold 生成 Skill
+│   │   ├── SKILL.md             # 对话流程和生成逻辑
+│   │   ├── scripts/
+│   │   │   ├── generate.sh      # 项目生成脚本
+│   │   │   └── test-generate.sh # 生成测试
+│   │   └── references/
+│   │       ├── commands/         # 12 个 Slash 命令
+│   │       ├── skills/           # 7 个子 Skill
+│   │       ├── docs/             # mcp-setup.md
+│   │       ├── types/            # 项目模板（pc/h5/both）
+│   │       └── extras/           # E2E 模块
+│   └── scaffold-sync/            # /scaffold-sync 同步 Skill
+│       └── SKILL.md
+├── scripts/
+│   └── install.sh               # 一键安装脚本
 ├── CLAUDE.md
 └── README.md
 ```
 
+---
+
 ## 开发指南
+
+### 修改插件
+
+```bash
+# 修改后验证 → 注册 → 安装
+claude plugin validate .
+claude plugin marketplace add .
+claude plugin uninstall fe-gen2template && claude plugin install fe-gen2template
+```
+
+### 版本管理
+
+修改任何文件后，同步递增以下位置的版本号：
+
+| 文件 | 字段 |
+|------|------|
+| `.claude-plugin/plugin.json` | `version` |
+| `package.json` | `version` |
+| `.claude-plugin/marketplace.json` | `plugins[0].version` |
+| 对应 Skill 的 `SKILL.md` | frontmatter `version` |
+
+递增规则：
+
+- **minor**（1.1.0 → 1.2.0）：新增功能/章节/脚本
+- **patch**（1.1.0 → 1.1.1）：修正措辞、小幅优化
+- **major**（1.1.0 → 2.0.0）：删除章节、破坏性变更
 
 ### 新增 Command
 
-Command 是 Slash 命令，文件位于 `references/commands/<命令名>.md`，文件名即命令名。
+Command 是 Slash 命令，位于 `references/commands/<命令名>.md`：
 
 ```markdown
 ---
@@ -144,7 +213,7 @@ allowed-tools: Bash(git add:*), Bash(git status:*)
 
 ### 新增 Skill
 
-Skill 可被 Claude 自动触发或手动调用。每个技能一个目录，位于 `references/skills/<技能名>/SKILL.md`。
+Skill 可被 Claude 自动触发或手动调用，位于 `references/skills/<技能名>/SKILL.md`：
 
 ```markdown
 ---
@@ -156,20 +225,8 @@ description: >-
 技能的完整逻辑。如需额外资源文件，放在同目录下。
 ```
 
-### 发布流程
+---
 
-修改 Command 或 Skill 后：
+## 许可证
 
-```bash
-claude plugin validate .
-claude plugin marketplace add .
-claude plugin install fe-gen2template
-```
-
-已生成的项目通过 `/scaffold-sync` 同步最新内容。
-
-## 注意事项
-
-- `scaffold-sync` 和 `update-readme` 无条件复制到所有项目，其余 Command/Skill 仅在 Q6 选"包含"时复制
-- 分支命名格式为 `<type>/<name>`，不包含开发者名称
-- `plugin.json` 中的 `version` 会写入目标项目的 CLAUDE.md，发版时记得更新
+MIT
