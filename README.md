@@ -210,6 +210,7 @@ Command 是 Slash 命令，位于 `references/commands/<命令名>.md`：
 ```markdown
 ---
 description: 命令的一句话描述
+version: 1.0.0
 allowed-tools: Bash(git add:*), Bash(git status:*)
 ---
 
@@ -223,6 +224,7 @@ Skill 可被 Claude 自动触发或手动调用，位于 `references/skills/<技
 ```markdown
 ---
 name: my-skill
+version: 1.0.0
 description: >-
   触发条件和使用场景。Claude 据此判断何时使用该技能。
 ---
