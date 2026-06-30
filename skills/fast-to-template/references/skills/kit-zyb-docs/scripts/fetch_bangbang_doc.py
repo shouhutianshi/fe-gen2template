@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 帮帮文档获取工具
-用于从docs.zuoyebang.cc获取文档内容
+用于从docs.yukework.com获取文档内容
 """
 
 import os
@@ -16,9 +16,10 @@ import urllib.parse
 from pathlib import Path
 from typing import Optional, Dict, Any, Tuple
 
-# 添加父目录到路径，以便导入cookie_manager
+# 添加父目录到路径，以便导入脚本模块
 sys.path.append(str(Path(__file__).parent.parent))
 from scripts.cookie_manager import CookieManager
+from scripts.doc_config import DOCS_DOMAIN, DOCS_EXPORT_URL, DOCS_REFERER, get_export_progress_url
 
 class BangbangDocFetcher:
     """帮帮文档获取器"""
@@ -84,7 +85,7 @@ class BangbangDocFetcher:
     def get_cookie(self) -> Optional[str]:
         """从加密文件获取Cookie"""
         try:
-            cookie = self.cookie_manager.get_cookie('docs.zuoyebang.cc')
+            cookie = self.cookie_manager.get_cookie(DOCS_DOMAIN)
             if cookie:
                 self.log("从加密文件获取到Cookie")
                 return cookie
@@ -98,7 +99,7 @@ class BangbangDocFetcher:
     def save_cookie(self, cookie: str):
         """加密保存Cookie到本地文件"""
         try:
-            self.cookie_manager.save_cookie('docs.zuoyebang.cc', cookie)
+            self.cookie_manager.save_cookie(DOCS_DOMAIN, cookie)
             self.log("Cookie已加密保存到本地文件")
         except Exception as e:
             self.error(f"保存Cookie失败: {e}")
@@ -161,7 +162,7 @@ class BangbangDocFetcher:
             print("1. 在浏览器中按F12打开开发者工具")
             print("2. 切换到Network标签页")
             print("3. 刷新页面")
-            print("4. 找到任意一个docs.zuoyebang.cc的请求")
+            print(f"4. 找到任意一个{DOCS_DOMAIN}的请求")
             print("5. 在Request Headers中找到Cookie")
             print("6. 复制完整的Cookie字符串")
             print("=" * 60)
@@ -184,7 +185,7 @@ class BangbangDocFetcher:
     
     def create_export_task(self, file_id: str, cookie: str) -> Optional[str]:
         """创建导出任务"""
-        url = "https://docs.zuoyebang.cc/document-application/api/v2/file/export"
+        url = DOCS_EXPORT_URL
         
         headers = self.session.headers.copy()
         headers['Cookie'] = cookie
@@ -222,7 +223,7 @@ class BangbangDocFetcher:
     
     def check_export_progress(self, task_id: str, cookie: str) -> Tuple[Optional[str], bool]:
         """检查导出进度"""
-        url = f"https://docs.zuoyebang.cc/document-application/api/v2/file/export/progress?taskId={task_id}"
+        url = get_export_progress_url(task_id)
         
         headers = self.session.headers.copy()
         headers['Cookie'] = cookie
@@ -295,7 +296,7 @@ class BangbangDocFetcher:
         # 添加headers
         curl_cmd.extend(['-H', 'accept: */*'])
         curl_cmd.extend(['-H', 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36'])
-        curl_cmd.extend(['-H', 'referer: https://docs.zuoyebang.cc/'])
+        curl_cmd.extend(['-H', f'referer: {DOCS_REFERER}'])
         
         if cookie:
             curl_cmd.extend(['-H', f'Cookie: {cookie}'])

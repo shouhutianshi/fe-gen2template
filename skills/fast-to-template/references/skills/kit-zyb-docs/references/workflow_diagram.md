@@ -4,12 +4,12 @@
 
 ```mermaid
 graph TD
-    A{从keychain中获取docs.zuoyebang.cc的Cookie} --> |获取成功| C{使用Cookie创建导出任务}
+    A{从keychain中获取docs.yukework.com的Cookie} --> |获取成功| C{使用Cookie创建导出任务}
     A --> |获取失败或Cookie为空| D[在浏览器中打开文档]
     C --> |创建导出任务返回值code=8000| D
     D --> F[未登录时，在浏览器中打开文档，会自动跳转到登录页面<br>等待用户手动输入账号密码，登录]
     F --> H[用户登录成功后，浏览器页面会自动跳转到文档页面]
-    H --> I[获取docs.zuoyebang.cc域名下的Cookie]
+    H --> I[获取docs.yukework.com域名下的Cookie]
     I --> J[将Cookie保存到keychain中]
     J --> K{使用Cookie创建导出任务}
     K --> |创建导出任务成功| L[从创建导出任务接口返回值中取出taskId]
@@ -48,7 +48,7 @@ graph TD
 ### 步骤4: 用户登录和Cookie获取
 **目标**: 用户登录后获取新的Cookie
 1. 用户登录成功后，页面自动跳转到文档页面
-2. 从浏览器获取docs.zuoyebang.cc域名下的Cookie
+2. 从浏览器获取docs.yukework.com域名下的Cookie
 3. 将Cookie保存到系统keychain中
 4. 使用新Cookie创建导出任务
 

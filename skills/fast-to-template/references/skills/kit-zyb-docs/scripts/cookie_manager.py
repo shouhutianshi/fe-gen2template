@@ -111,7 +111,7 @@ class CookieManager:
         """加密保存Cookie到本地文件
         
         Args:
-            domain: 域名，如 'docs.zuoyebang.cc'
+            domain: 域名，如 'docs.yukework.com'
             cookie_string: Cookie字符串
             expires_hours: 过期时间（小时），默认30天
         """

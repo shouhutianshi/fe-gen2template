@@ -102,7 +102,7 @@ pip install hashlib  # hashlib 为 Python 内置，无需额外安装
 
 | 字段 | 值 |
 |---|---|
-| URL | `https://pms.zuoyebang.cc/testplatapi/api/getbuglist` |
+| URL | `https://pms.yukework.com/testplatapi/api/getbuglist` |
 | Method | POST |
 | Content-Type | `application/x-www-form-urlencoded` |
 | 认证方式 | 验签（`sign` 参数，见第二步） |
@@ -113,7 +113,7 @@ pip install hashlib  # hashlib 为 Python 内置，无需额外安装
 TIMESTAMP=$(python3 -c "import time; print(int(time.time()))") && \
 SIGN=$(python3 scripts/get_sign.py "{\"page\":\"1\",\"page_size\":\"100\",\"source\":\"QI\",\"reqid\":\"${REQ_ID}\",\"status\":\"open,handling\",\"time\":\"${TIMESTAMP}\"}") && \
 curl -s --insecure \
-  'https://pms.zuoyebang.cc/testplatapi/api/getbuglist' \
+  'https://pms.yukework.com/testplatapi/api/getbuglist' \
   -H 'accept: application/json, text/plain, */*' \
   -H 'content-type: application/x-www-form-urlencoded' \
   -H 'x-requested-with: XMLHttpRequest' \

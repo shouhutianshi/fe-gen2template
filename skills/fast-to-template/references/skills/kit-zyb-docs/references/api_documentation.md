@@ -2,13 +2,13 @@
 
 ## 概述
 
-本文档详细说明帮帮文档（docs.zuoyebang.cc）的API接口，用于文档导出和内容获取。
+本文档详细说明帮帮文档（docs.yukework.com）的API接口，用于文档导出和内容获取。
 
 ## 接口端点
 
 ### 1. 创建导出任务接口
 
-**URL**: `https://docs.zuoyebang.cc/document-application/api/v2/file/export`
+**URL**: `https://docs.yukework.com/document-application/api/v2/file/export`
 
 **方法**: POST
 
@@ -69,7 +69,7 @@ Cookie: [完整的Cookie字符串]
 
 ### 2. 获取导出进度接口
 
-**URL**: `https://docs.zuoyebang.cc/document-application/api/v2/file/export/progress`
+**URL**: `https://docs.yukework.com/document-application/api/v2/file/export/progress`
 
 **方法**: GET
 
@@ -167,13 +167,13 @@ Cookie: [完整的Cookie字符串]
 
 ### 文档URL
 ```
-https://docs.zuoyebang.cc/doc?fileId=2036002822277443586
+https://docs.yukework.com/doc?fileId=2036002822277443586
 ```
 - 提取`fileId`: `2036002822277443586`
 
 ### 登录页面URL
 ```
-https://ips.zuoyebang.cc/static/cas-fe/?version=2.0&sdk=java&sid=document&service=https%3A%2F%2Fdocs.zuoyebang.cc%2Fdocument-application%2Fapi%2Fips%2Flogin%2Fcallback%3Fpath%3Dhttps%253A%252F%252Fdocs.zuoyebang.cc%252Fdoc%253FfileId%253D2036002822277443586#/
+https://ips.yukework.com/static/cas-fe/?version=2.0&sdk=java&sid=document&service=https%3A%2F%2Fdocs.yukework.com%2Fdocument-application%2Fapi%2Fips%2Flogin%2Fcallback%3Fpath%3Dhttps%253A%252F%252Fdocs.yukework.com%252Fdoc%253FfileId%253D2036002822277443586#/
 ```
 - 包含重定向逻辑
 - 最终会跳转到文档URL

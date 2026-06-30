@@ -12,6 +12,8 @@ import sys
 from typing import Optional, Dict, Any, Tuple
 from pathlib import Path
 
+from doc_config import DOCS_DOMAIN, DOCS_SUCCESS_INDICATORS, LOGIN_PAGE_PATTERNS, is_docs_cookie_domain
+
 try:
     from playwright.async_api import async_playwright, Page, BrowserContext
 except ImportError:
@@ -162,16 +164,7 @@ class BrowserAutomation:
             self.log(f"当前URL: {current_url}")
             
             # 方法1：检查URL是否匹配登录页面模式
-            login_page_patterns = [
-                'ips.zuoyebang.cc/static/cas-fe/',
-                'ips.zuoyebang.cc',
-                'login.zuoyebang.cc',
-                '/cas/login',
-                'service=https%3A%2F%2Fdocs.zuoyebang.cc',
-                'document-application/api/ips/login/callback'
-            ]
-            
-            for pattern in login_page_patterns:
+            for pattern in LOGIN_PAGE_PATTERNS:
                 if pattern in current_url:
                     self.log(f"检测到登录页面（URL模式）: {pattern}")
                     return False  # 需要登录
@@ -212,12 +205,12 @@ class BrowserAutomation:
                 self.log(f"检查页面元素时出错: {e}")
             
             # 方法3：检查是否已登录并进入文档页面
-            if 'docs.zuoyebang.cc' in current_url and 'fileId=' in current_url:
+            if DOCS_DOMAIN in current_url and 'fileId=' in current_url:
                 self.log("已进入文档页面")
                 return True  # 已登录
             
             # 方法4：检查是否跳转到文档页面但可能没有fileId参数
-            if 'docs.zuoyebang.cc' in current_url:
+            if DOCS_DOMAIN in current_url:
                 self.log(f"已进入帮帮文档域名: {current_url}")
                 # 进一步检查页面内容确认不是登录页面
                 try:
@@ -283,29 +276,20 @@ class BrowserAutomation:
                     self.log("✅ 检测到已离开登录页面，可能登录成功")
                     
                     # 检查是否进入文档页面
-                    if 'docs.zuoyebang.cc' in current_url:
+                    if DOCS_DOMAIN in current_url:
                         self.log(f"✅ 已进入帮帮文档页面: {current_url[:100]}...")
                         
                         # 进一步确认登录成功
                         if await self._confirm_login_success():
                             return True
                     
-                    # 检查是否为文档页面（即使不在docs.zuoyebang.cc域名）
+                    # 检查是否为文档页面（即使不在docs.yukework.com域名）
                     if await self._is_document_page():
                         self.log("✅ 检测到文档页面特征元素（分享、演示等）")
                         return True
                 
                 # 方法2：检查明确的成功URL模式
-                success_indicators = [
-                    ('docs.zuoyebang.cc/doc?fileId=', '已登录并进入文档页面'),
-                    ('docs.zuoyebang.cc/doc/', '已登录并进入文档页面'),
-                    ('docs.zuoyebang.cc/edit', '已登录并进入编辑页面'),
-                    ('docs.zuoyebang.cc/d/', '已登录并进入文档查看页面'),
-                    ('docs.zuoyebang.cc/spaces', '已登录，进入空间列表'),
-                    ('docs.zuoyebang.cc/home', '已登录，进入首页'),
-                ]
-                
-                for pattern, message in success_indicators:
+                for pattern, message in DOCS_SUCCESS_INDICATORS:
                     if pattern in current_url:
                         self.log(f"✅ {message}")
                         
@@ -525,14 +509,14 @@ class BrowserAutomation:
             # 获取所有Cookie
             cookies = await self.context.cookies()
             
-            # 过滤出docs.zuoyebang.cc的Cookie
+            # 过滤出 docs 域名下的 Cookie
             doc_cookies = []
             for cookie in cookies:
-                if 'docs.zuoyebang.cc' in cookie.get('domain', '') or 'zuoyebang.cc' in cookie.get('domain', ''):
+                if is_docs_cookie_domain(cookie.get('domain', '')):
                     doc_cookies.append(f"{cookie['name']}={cookie['value']}")
             
             if not doc_cookies:
-                self.error("未找到docs.zuoyebang.cc的Cookie")
+                self.error("未找到docs.yukework.com的Cookie")
                 return None
             
             # 组合Cookie字符串

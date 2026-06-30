@@ -17,6 +17,7 @@ sys.path.append(str(Path(__file__).parent))
 try:
     from browser_automation import BrowserAutomation
     from cookie_manager import CookieManager
+    from doc_config import DOCS_DOMAIN, DOCS_EXPORT_URL, get_export_progress_url
 except ImportError as e:
     print(f"导入模块失败: {e}")
     print("请确保已安装依赖: pip install -r requirements.txt")
@@ -62,7 +63,7 @@ class DocContentFetcher:
     def get_cookie(self) -> str:
         """获取Cookie，如果没有则自动登录获取"""
         # 1. 尝试从加密文件获取
-        cookie = self.cookie_manager.get_cookie('docs.zuoyebang.cc')
+        cookie = self.cookie_manager.get_cookie(DOCS_DOMAIN)
         if cookie:
             self.log("从加密文件获取到Cookie")
             return cookie
@@ -86,7 +87,7 @@ class DocContentFetcher:
                 self.log(f"登录成功，获取到fileId: {file_id}")
                 
                 # 加密保存Cookie到本地文件
-                self.cookie_manager.save_cookie('docs.zuoyebang.cc', cookie)
+                self.cookie_manager.save_cookie(DOCS_DOMAIN, cookie)
                 
                 return cookie
             else:
@@ -102,7 +103,7 @@ class DocContentFetcher:
     
     def create_export_task(self, file_id: str, cookie: str) -> str:
         """创建导出任务"""
-        url = "https://docs.zuoyebang.cc/document-application/api/v2/file/export"
+        url = DOCS_EXPORT_URL
         
         headers = self.session.headers.copy()
         headers['Cookie'] = cookie
@@ -136,7 +137,7 @@ class DocContentFetcher:
     
     def check_export_progress(self, task_id: str, cookie: str):
         """检查导出进度"""
-        url = f"https://docs.zuoyebang.cc/document-application/api/v2/file/export/progress?taskId={task_id}"
+        url = get_export_progress_url(task_id)
         
         headers = self.session.headers.copy()
         headers['Cookie'] = cookie
